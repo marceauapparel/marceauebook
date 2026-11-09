@@ -14,7 +14,7 @@
 button,input,select{font:inherit}button{cursor:pointer}
 .app{display:flex;min-height:100vh}.sidebar{width:250px;border-right:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:28px;background:#fff;flex-shrink:0}
 .brand{width:100%;height:82px;object-fit:contain;filter:invert(1);mix-blend-mode:multiply}
-.brand-wrap{padding:0 4px}.brand-sub{font-size:10px;letter-spacing:3px;text-align:center;color:#777;margin-top:4px}
+.brand-wrap{padding:0 4px;text-align:center}.brand-logo{display:block;width:100%;height:76px;object-fit:contain;filter:none;mix-blend-mode:normal}.brand-fallback{display:none;font-size:24px;font-weight:800;letter-spacing:4px;text-align:center}.brand-sub{font-size:10px;letter-spacing:3px;text-align:center;color:#777;margin-top:4px}
 .nav{display:grid;gap:8px}.nav button{border:0;background:transparent;text-align:left;padding:13px 14px;border-radius:12px;color:#555;font-weight:500;display:flex;align-items:center;gap:12px}
 .nav button.active,.nav button:hover{background:#111;color:#fff}.nav .ico{width:20px;text-align:center;font-size:16px}
 .side-note{margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:14px;color:#777;font-size:11px;line-height:1.7}
@@ -40,19 +40,20 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .form-card{max-width:650px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#666}.field input,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;outline:none;background:white}.field input:focus,.field select:focus{border-color:#111}
 .form-actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}.empty{text-align:center;color:#999;padding:32px 12px;font-size:12px}
-.mobile-nav{display:none}.brand-mobile{display:none}
+.mobile-nav{display:none}.brand-mobile{display:none}.mobile-logo-fallback{display:none;font-size:20px;letter-spacing:3px}
 .footer{font-size:10px;color:#aaa;text-align:center;margin-top:30px}
 .sync-indicator{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#216e3a;background:#e9f5ed;padding:6px 12px;border-radius:99px;font-weight:500}
 .sync-indicator.syncing{color:#a34b12;background:#fff1e7}
 @media(max-width:900px){.sidebar{width:210px}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
-@media(max-width:620px){.app{display:block;padding-bottom:76px}.sidebar{display:none}main{padding:20px 15px 30px}.topbar{margin-bottom:22px}.brand-mobile{display:flex;align-items:center;gap:12px;margin-bottom:18px}.brand-mobile img{width:150px;height:45px;object-fit:contain;filter:invert(1);mix-blend-mode:multiply}.brand-mobile span{font-size:9px;letter-spacing:2px;color:#888}.date-chip{font-size:10px;padding:8px 10px}.welcome{align-items:start;flex-direction:column}.welcome .btn{width:100%}.stats{gap:10px}.card{padding:15px;border-radius:15px}.stat-value{font-size:22px}.grid2{gap:12px}.chart{height:180px}.mobile-nav{display:flex;position:fixed;z-index:5;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -5px 20px #00000008}.mobile-nav button{border:0;background:transparent;color:#777;font-size:9px;display:grid;justify-items:center;gap:3px;padding:5px 8px}.mobile-nav button.active{color:#111;font-weight:700}.mobile-nav b{font-size:17px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar .btn{flex:1}.footer{margin-bottom:8px}}
+@media(max-width:620px){.app{display:block;padding-bottom:76px}.sidebar{display:none}main{padding:20px 15px 30px}.topbar{margin-bottom:22px}.brand-mobile{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 15px;margin-bottom:18px;border-bottom:1px solid var(--line)}.brand-mobile img{display:block;width:auto;height:42px;max-width:155px;object-fit:contain;filter:none;mix-blend-mode:normal}.brand-mobile span{font-size:9px;letter-spacing:2px;color:#888;font-weight:600;white-space:nowrap}.date-chip{font-size:10px;padding:8px 10px}.welcome{align-items:start;flex-direction:column}.welcome .btn{width:100%}.stats{gap:10px}.card{padding:15px;border-radius:15px}.stat-value{font-size:22px}.grid2{gap:12px}.chart{height:180px}.mobile-nav{display:flex;position:fixed;z-index:5;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -5px 20px #00000008}.mobile-nav button{border:0;background:transparent;color:#777;font-size:9px;display:grid;justify-items:center;gap:3px;padding:5px 8px}.mobile-nav button.active{color:#111;font-weight:700}.mobile-nav b{font-size:17px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar .btn{flex:1}.footer{margin-bottom:8px}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar">
   <div class="brand-wrap">
-    <div style="font-size:24px;font-weight:800;letter-spacing:4px;text-align:center;margin-top:10px">MARCEAU</div>
+    <img class="brand-logo" src="https://raw.githubusercontent.com/marceauapparel/marceauassest/main/Logo.png" alt="MARCEAU logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div class="brand-fallback">MARCEAU</div>
     <div class="brand-sub">CLOTHING MANAGEMENT</div>
   </div>
   <nav class="nav" id="sideNav">
@@ -70,13 +71,9 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 
 <main>
   <div class="brand-mobile">
-<div class="brand-mobile">
-  <div class="brand-mobile" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; border-bottom: 1px solid var(--line); margin-bottom: 15px;">
-  <img src="https://raw.githubusercontent.com/marceauapparel/marceauassest/main/Logo.png" alt="MARCEAU Logo" style="height: 35px; width: auto; object-fit: contain;">
-  <span style="font-size: 9px; letter-spacing: 2px; color: #888; font-weight: 600;">BUSINESS DASHBOARD</span>
-</div>
-
-</div>
+    <img src="https://raw.githubusercontent.com/marceauapparel/marceauassest/main/Logo.png" alt="MARCEAU logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <strong class="mobile-logo-fallback">MARCEAU</strong>
+    <span>BUSINESS DASHBOARD</span>
   </div>
   <header class="topbar">
     <div>
@@ -284,33 +281,54 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
   const dbRef = ref(db, 'marceau_data');
 
   window.appData = { products: [], sales: [], expenses: [] };
+  const asArray = value => Array.isArray(value) ? value : (value && typeof value === 'object' ? Object.values(value) : []);
 
-  // Listen for Realtime Changes
+  // Listen for Realtime Changes. A missing database node is a valid empty account.
   onValue(dbRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      window.appData = {
-        products: data.products || [],
-        sales: data.sales || [],
-        expenses: data.expenses || []
-      };
-    }
+    const data = snapshot.val() || {};
+    window.appData = {
+      products: asArray(data.products),
+      sales: asArray(data.sales),
+      expenses: asArray(data.expenses)
+    };
     window.render();
-    document.getElementById('syncStatus').classList.remove('syncing');
-    document.getElementById('syncStatus').textContent = '● Connected (Live)';
+    const status = document.getElementById('syncStatus');
+    status.classList.remove('syncing');
+    status.textContent = '● Connected (Live)';
+  }, (error) => {
+    console.error('Firebase connection error:', error);
+    const status = document.getElementById('syncStatus');
+    status.classList.remove('syncing');
+    status.textContent = '● Connection Error';
   });
 
   // Save Function to Firebase
-  window.saveToFirebase = function() {
-    document.getElementById('syncStatus').classList.add('syncing');
-    document.getElementById('syncStatus').textContent = '● Syncing...';
-    set(dbRef, window.appData);
+  window.saveToFirebase = async function() {
+    const status = document.getElementById('syncStatus');
+    status.classList.add('syncing');
+    status.textContent = '● Syncing...';
+    try {
+      await set(dbRef, window.appData);
+      status.classList.remove('syncing');
+      status.textContent = '● Connected (Live)';
+    } catch (error) {
+      console.error('Firebase save error:', error);
+      status.classList.remove('syncing');
+      status.textContent = '● Save Failed';
+      alert('Data save failed. Please check your connection and Firebase permissions.');
+    }
   };
 </script>
 
 <script>
   const money = n => 'Rs. ' + Number(n||0).toLocaleString('en-LK', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  const dateNow = () => new Date().toISOString().slice(0, 10);
+  const dateKey = d => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+  const dateNow = () => dateKey(new Date());
   const niceDate = d => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'});
 
   function go(page) {
@@ -332,11 +350,11 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
   function addProduct(e) {
     e.preventDefault();
     window.appData.products.push({
-      id: crypto.randomUUID(),
-      name: pName.value.trim(),
-      cost: +pCost.value,
-      price: +pPrice.value,
-      stock: +pStock.value
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
+      name: document.getElementById('pName').value.trim(),
+      cost: Number(document.getElementById('pCost').value),
+      price: Number(document.getElementById('pPrice').value),
+      stock: Number(document.getElementById('pStock').value)
     });
     e.target.reset();
     hideForm('productForm');
@@ -344,52 +362,58 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
   }
 
   function fillProductSelect() {
-    sProduct.innerHTML = '<option value="">Choose a product</option>' + 
-      window.appData.products.filter(p => p.stock > 0).map(p => `<option value="${p.id}">${esc(p.name)} — ${p.stock} in stock</option>`).join('');
+    const select = document.getElementById('sProduct');
+    select.innerHTML = '<option value="">Choose a product</option>' +
+      window.appData.products.filter(p => Number(p.stock) > 0).map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${Number(p.stock)} in stock</option>`).join('');
     updateSaleTotal();
   }
 
   function updateSaleTotal() {
-    let p = window.appData.products.find(x => x.id === sProduct.value);
-    if (p && (!sPrice.dataset.edited || sPrice.dataset.product !== p.id)) {
-      sPrice.value = p.price;
-      sPrice.dataset.edited = '';
-      sPrice.dataset.product = p.id;
+    const productId = document.getElementById('sProduct').value;
+    const priceInput = document.getElementById('sPrice');
+    const qtyInput = document.getElementById('sQty');
+    const totalInput = document.getElementById('sTotal');
+    let p = window.appData.products.find(x => x.id === productId);
+    if (p && (!priceInput.dataset.edited || priceInput.dataset.product !== p.id)) {
+      priceInput.value = p.price;
+      priceInput.dataset.edited = '';
+      priceInput.dataset.product = p.id;
     }
-    let q = Math.max(0, +sQty.value || 0);
-    sTotal.value = money(q * (+sPrice.value || 0));
+    let q = Math.max(0, Number(qtyInput.value) || 0);
+    totalInput.value = money(q * (Number(priceInput.value) || 0));
   }
-  sPrice.addEventListener('input', () => sPrice.dataset.edited = '1');
+  document.getElementById('sPrice').addEventListener('input', () => { document.getElementById('sPrice').dataset.edited = '1'; updateSaleTotal(); });
 
   function addSale(e) {
     e.preventDefault();
-    let p = window.appData.products.find(x => x.id === sProduct.value), q = +sQty.value, price = +sPrice.value;
+    const productId = document.getElementById('sProduct').value;
+    const p = window.appData.products.find(x => x.id === productId);
+    const q = Number(document.getElementById('sQty').value);
+    const price = Number(document.getElementById('sPrice').value);
     if (!p) return alert('Please choose a product.');
-    if (q < 1 || q > p.stock) return alert('Not enough stock available.');
+    if (!Number.isInteger(q) || q < 1 || q > Number(p.stock)) return alert('Enter a valid quantity within available stock.');
+    if (!Number.isFinite(price) || price < 0) return alert('Please enter a valid selling price.');
     window.appData.sales.unshift({
-      id: crypto.randomUUID(),
-      productId: p.id,
-      name: p.name,
-      qty: q,
-      price: price,
-      total: q * price,
-      cost: p.cost,
-      date: dateNow()
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
+      productId: p.id, name: p.name, qty: q, price,
+      total: q * price, cost: Number(p.cost) || 0, date: dateNow()
     });
-    p.stock -= q;
+    p.stock = Number(p.stock) - q;
     e.target.reset();
-    sPrice.dataset.edited = '';
+    document.getElementById('sPrice').dataset.edited = '';
     hideForm('saleForm');
+    fillProductSelect();
+    window.render();
     window.saveToFirebase();
   }
 
   function addExpense(e) {
     e.preventDefault();
     window.appData.expenses.unshift({
-      id: crypto.randomUUID(),
-      desc: eDesc.value.trim(),
-      category: eCategory.value,
-      amount: +eAmount.value,
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
+      desc: document.getElementById('eDesc').value.trim(),
+      category: document.getElementById('eCategory').value,
+      amount: Number(document.getElementById('eAmount').value),
       date: dateNow()
     });
     e.target.reset();
@@ -404,8 +428,9 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
       window.appData.products = window.appData.products.filter(x => x.id !== id);
     } else if (type === 'sales') {
       let s = window.appData.sales.find(x => x.id === id);
+      if (!s) return;
       let p = window.appData.products.find(x => x.id === s.productId);
-      if (p) p.stock += s.qty;
+      if (p) p.stock = Number(p.stock || 0) + Number(s.qty || 0);
       window.appData.sales = window.appData.sales.filter(x => x.id !== id);
     } else {
       window.appData.expenses = window.appData.expenses.filter(x => x.id !== id);
@@ -416,56 +441,66 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
 
   function totals() {
-    let period = document.getElementById('periodFilter')?.value || 'all';
-    let cutoff = new Date();
-    if (period === 'week') cutoff.setDate(cutoff.getDate() - 6);
-    if (period === 'month') cutoff = new Date(cutoff.getFullYear(), cutoff.getMonth(), 1);
-    let include = d => period === 'all' || new Date(d + 'T00:00:00') >= new Date(cutoff.toDateString());
-
-    let filteredSales = window.appData.sales.filter(s => include(s.date));
-    let filteredExpenses = window.appData.expenses.filter(x => include(x.date));
-    let revenue = filteredSales.reduce((a, s) => a + s.total, 0);
-    let cost = filteredSales.reduce((a, s) => a + s.qty * s.cost, 0);
-    let expenses = filteredExpenses.reduce((a, x) => a + x.amount, 0);
-    let gross = revenue - cost;
-    let net = gross - expenses;
-    return { revenue, cost, expenses, gross, net, units: filteredSales.reduce((a, s) => a + s.qty, 0), stock: window.appData.products.reduce((a, p) => a + p.stock, 0) };
+    const period = document.getElementById('periodFilter')?.value || 'all';
+    const today = new Date();
+    let startDate = '';
+    if (period === 'week') {
+      const cutoff = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
+      startDate = dateKey(cutoff);
+    } else if (period === 'month') {
+      startDate = dateKey(new Date(today.getFullYear(), today.getMonth(), 1));
+    }
+    const include = d => period === 'all' || String(d || '') >= startDate;
+    const filteredSales = window.appData.sales.filter(s => include(s.date));
+    const filteredExpenses = window.appData.expenses.filter(x => include(x.date));
+    const revenueTotal = filteredSales.reduce((a, s) => a + Number(s.total || 0), 0);
+    const cost = filteredSales.reduce((a, s) => a + Number(s.qty || 0) * Number(s.cost || 0), 0);
+    const expenses = filteredExpenses.reduce((a, x) => a + Number(x.amount || 0), 0);
+    const gross = revenueTotal - cost;
+    const net = gross - expenses;
+    return {
+      revenue: revenueTotal, cost, expenses, gross, net,
+      units: filteredSales.reduce((a, s) => a + Number(s.qty || 0), 0),
+      salesCount: filteredSales.length,
+      stock: window.appData.products.reduce((a, p) => a + Number(p.stock || 0), 0)
+    };
   }
 
   window.render = function() {
     let t = totals();
-    revenue.textContent = money(t.revenue);
-    expenseTotal.textContent = money(t.expenses);
-    netProfit.textContent = money(Math.abs(t.net));
-    netProfit.style.color = t.net < 0 ? '#b42318' : '#111';
-    profitNote.textContent = t.net < 0 ? 'Loss after costs and expenses' : 'Profit after costs and expenses';
-    stockCount.textContent = t.stock;
+    document.getElementById('revenue').textContent = money(t.revenue);
+    document.getElementById('expenseTotal').textContent = money(t.expenses);
+    document.getElementById('netProfit').textContent = (t.net < 0 ? '−' : '') + money(Math.abs(t.net));
+    document.getElementById('netProfit').style.color = t.net < 0 ? '#b42318' : '#111';
+    document.getElementById('profitNote').textContent = t.net < 0 ? 'Loss after costs and expenses' : 'Profit after costs and expenses';
+    document.getElementById('stockCount').textContent = t.stock;
 
-    productsTable.innerHTML = window.appData.products.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${money(p.stock*p.cost)}</td><td><button class="btn danger" onclick="del('products','${p.id}')">Delete</button></td></tr>`).join('');
-    productsEmpty.style.display = window.appData.products.length ? 'none' : 'block';
+    document.getElementById('productsTable').innerHTML = window.appData.products.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${money(p.stock*p.cost)}</td><td><button class="btn danger" onclick="del('products','${p.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('productsEmpty').style.display = window.appData.products.length ? 'none' : 'block';
+    renderProductsSearch();
 
-    salesTable.innerHTML = window.appData.sales.map(s => `<tr><td>${niceDate(s.date)}</td><td>${esc(s.name)}</td><td>${s.qty}</td><td>${money(s.price)}</td><td><b>${money(s.total)}</b></td><td><button class="btn danger" onclick="del('sales','${s.id}')">Delete</button></td></tr>`).join('');
-    salesEmpty.style.display = window.appData.sales.length ? 'none' : 'block';
+    document.getElementById('salesTable').innerHTML = window.appData.sales.map(s => `<tr><td>${niceDate(s.date)}</td><td>${esc(s.name)}</td><td>${s.qty}</td><td>${money(s.price)}</td><td><b>${money(s.total)}</b></td><td><button class="btn danger" onclick="del('sales','${s.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('salesEmpty').style.display = window.appData.sales.length ? 'none' : 'block';
 
-    expensesTable.innerHTML = window.appData.expenses.map(x => `<tr><td>${niceDate(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.category)}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger" onclick="del('expenses','${x.id}')">Delete</button></td></tr>`).join('');
-    expensesEmpty.style.display = window.appData.expenses.length ? 'none' : 'block';
+    document.getElementById('expensesTable').innerHTML = window.appData.expenses.map(x => `<tr><td>${niceDate(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.category)}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger" onclick="del('expenses','${x.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('expensesEmpty').style.display = window.appData.expenses.length ? 'none' : 'block';
 
     let preview = window.appData.products.slice(0, 5);
-    stockPreview.innerHTML = preview.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="pill ${p.stock===0?'low':p.stock<5?'low':'good'}">${p.stock===0?'Out of stock':p.stock<5?'Low stock':'In stock'}</span></td></tr>`).join('') || '<tr><td colspan="4" class="empty">Add products to see stock status.</td></tr>';
+    document.getElementById('stockPreview').innerHTML = preview.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="pill ${p.stock===0?'low':p.stock<5?'low':'good'}">${p.stock===0?'Out of stock':p.stock<5?'Low stock':'In stock'}</span></td></tr>`).join('') || '<tr><td colspan="4" class="empty">Add products to see stock status.</td></tr>';
 
     let activity = [...window.appData.sales.map(s => ({date: s.date, label: 'Sale · ' + s.name, amount: s.total})), ...window.appData.expenses.map(x => ({date: x.date, label: 'Expense · ' + x.desc, amount: -x.amount}))].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
     let low = window.appData.products.filter(p => p.stock > 0 && p.stock < 5);
-    lowStockCard.style.display = low.length ? 'block' : 'none';
-    lowStockList.innerHTML = low.map(p => `<div class="quick-row"><span>${esc(p.name)}</span><b>${p.stock} left</b></div>`).join('');
-    productCount.textContent = window.appData.products.length + ' products';
+    document.getElementById('lowStockCard').style.display = low.length ? 'block' : 'none';
+    document.getElementById('lowStockList').innerHTML = low.map(p => `<div class="quick-row"><span>${esc(p.name)}</span><b>${p.stock} left</b></div>`).join('');
+    document.getElementById('productCount').textContent = window.appData.products.length + ' products';
 
-    recent.innerHTML = activity.map(a => `<div class="quick-row"><span>${esc(a.label)}<br><small class="muted">${niceDate(a.date)}</small></span><b style="color:${a.amount<0?'#b42318':'#111'}">${a.amount<0?'−':'+'}${money(Math.abs(a.amount))}</b></div>`).join('') || '<div class="empty">Your latest sales and expenses will appear here.</div>';
+    document.getElementById('recent').innerHTML = activity.map(a => `<div class="quick-row"><span>${esc(a.label)}<br><small class="muted">${niceDate(a.date)}</small></span><b style="color:${a.amount<0?'#b42318':'#111'}">${a.amount<0?'−':'+'}${money(Math.abs(a.amount))}</b></div>`).join('') || '<div class="empty">Your latest sales and expenses will appear here.</div>';
 
-    rSales.textContent = window.appData.sales.length;
-    rUnits.textContent = t.units;
-    rCost.textContent = money(t.cost);
-    rGross.textContent = money(t.gross);
-    reportSummary.innerHTML = [['Total revenue', t.revenue], ['Cost of goods sold', -t.cost], ['Gross profit', t.gross], ['Business expenses', -t.expenses], ['Net ' + (t.net < 0 ? 'loss' : 'profit'), t.net]].map(([k, v]) => `<div class="quick-row"><span>${k}</span><b>${v < 0 ? '−' : ''}${money(Math.abs(v))}</b></div>`).join('');
+    document.getElementById('rSales').textContent = t.salesCount;
+    document.getElementById('rUnits').textContent = t.units;
+    document.getElementById('rCost').textContent = money(t.cost);
+    document.getElementById('rGross').textContent = money(t.gross);
+    document.getElementById('reportSummary').innerHTML = [['Total revenue', t.revenue], ['Cost of goods sold', -t.cost], ['Gross profit', t.gross], ['Business expenses', -t.expenses], ['Net ' + (t.net < 0 ? 'loss' : 'profit'), t.net]].map(([k, v]) => `<div class="quick-row"><span>${k}</span><b>${v < 0 ? '−' : ''}${money(Math.abs(v))}</b></div>`).join('');
 
     drawChart();
     if (document.getElementById('reportCanvas')) drawPNGReport();
@@ -476,7 +511,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
     for (let i = 6; i >= 0; i--) {
       let d = new Date();
       d.setDate(d.getDate() - i);
-      let key = d.toISOString().slice(0, 10);
+      let key = dateKey(d);
       days.push({
         key,
         label: d.toLocaleDateString('en', {weekday: 'short'}),
@@ -485,7 +520,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
       });
     }
     let max = Math.max(1, ...days.flatMap(d => [d.sales, d.expenses]));
-    chart.innerHTML = days.map(d => `<div class="bar-group"><div style="height:100%;display:flex;align-items:end;gap:3px"><div class="bar" title="Sales ${money(d.sales)}" style="height:${Math.max(2, d.sales/max*100)}%"></div><div class="bar expense" title="Expenses ${money(d.expenses)}" style="height:${Math.max(2, d.expenses/max*100)}%"></div></div><span class="bar-label">${d.label}</span></div>`).join('');
+    document.getElementById('chart').innerHTML = days.map(d => `<div class="bar-group"><div style="height:100%;display:flex;align-items:end;gap:3px"><div class="bar" title="Sales ${money(d.sales)}" style="height:${Math.max(2, d.sales/max*100)}%"></div><div class="bar expense" title="Expenses ${money(d.expenses)}" style="height:${Math.max(2, d.expenses/max*100)}%"></div></div><span class="bar-label">${d.label}</span></div>`).join('');
   }
 
   function renderProductsSearch() {
@@ -556,8 +591,27 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
     const a = document.createElement('a'); a.download = 'marceau-business-report-' + dateNow() + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
   }
 
-  today.textContent = new Date().toLocaleDateString('en-GB', {weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'});
-  sideDate.textContent = new Date().toLocaleDateString();
+  function exportCSV() {
+    const rows = [
+      ['Type', 'Date', 'Description / Product', 'Category', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
+      ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', s.qty || 0, s.price || 0, s.total || 0]),
+      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', '', '', x.amount || 0]),
+      ...window.appData.products.map(p => ['Stock', '', p.name || '', '', p.stock || 0, p.price || 0, Number(p.stock || 0) * Number(p.cost || 0)])
+    ];
+    const csv = rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'marceau-business-data-' + dateNow() + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', {weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'});
+  document.getElementById('sideDate').textContent = new Date().toLocaleDateString();
 </script>
 </body>
 </html>
