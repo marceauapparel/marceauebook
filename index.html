@@ -71,6 +71,64 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 .person-box span{display:block;font-size:10px;color:#888}
 .person-box b{display:block;font-size:17px;margin-top:5px}
 @media(max-width:620px){.auth-card{padding:26px 21px}.user-tools{gap:5px}.user-chip{font-size:9px;padding:7px 8px}}
+
+/* MARCEAU usability and visual refresh */
+:root{--ink:#101010;--muted:#777;--line:#ececec;--soft:#f7f7f7;--radius:18px}
+body{background:#fafafa}
+.app{background:#fafafa}
+.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid #ededed;box-shadow:8px 0 30px #00000003}
+main{padding-top:34px}
+.topbar{position:sticky;top:0;z-index:4;background:#fafafaee;backdrop-filter:blur(14px);padding:12px 0;border-bottom:1px solid #eeeeee;margin-bottom:26px}
+.page-title{letter-spacing:-1.2px}
+.card{box-shadow:0 5px 22px #00000004;transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{box-shadow:0 9px 28px #00000008}
+.btn{transition:transform .15s ease,background .15s ease,box-shadow .15s ease;box-shadow:0 3px 8px #0000000a}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px #00000012}
+.btn.light{box-shadow:none}
+.nav button{transition:background .18s ease,color .18s ease,transform .18s ease}
+.nav button:hover{transform:translateX(2px)}
+.quick-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 20px}
+.quick-action{display:flex;align-items:center;gap:11px;text-align:left;padding:14px 13px;background:#fff;border:1px solid var(--line);border-radius:15px;color:#111;min-width:0;transition:.18s ease}
+.quick-action:hover{border-color:#aaa;transform:translateY(-2px);box-shadow:0 8px 22px #00000008}
+.quick-action>span:nth-child(2){display:grid;gap:3px;min-width:0}
+.quick-action b{font-size:11px;font-weight:700}
+.quick-action small{font-size:9px;color:#888;white-space:nowrap}
+.quick-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;background:#f3f3f3;border-radius:11px;font-size:17px}
+.quick-arrow{margin-left:auto;color:#999;font-size:16px}
+.product-tools{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.product-tools input,.product-tools select{min-width:0;border:1px solid #e5e5e5;border-radius:11px;padding:11px 13px;background:#fff;color:#333;font-size:11px;outline:none}
+.product-tools input{width:min(260px,100%)}
+.product-tools select:focus,.product-tools input:focus{border-color:#111;box-shadow:0 0 0 3px #1111110a}
+.data-table tbody tr{transition:background .15s ease}
+.product-meta{display:block;color:#888;font-size:10px;margin-top:4px}
+.action-group{display:flex;gap:6px;white-space:nowrap}
+.action-group .btn{padding:7px 9px;font-size:10px}
+.stock-edit-hint{font-size:10px;color:#888;margin:10px 0 0}
+.data-table tbody tr:hover{background:#fafafa}
+.data-table th{letter-spacing:.7px;text-transform:uppercase}
+.pill{font-weight:600}
+.stat-value{line-height:1.15}
+.auth-screen{background:radial-gradient(ellipse at top,#fff 0%,#f4f4f4 75%)}
+.auth-card{box-shadow:0 24px 80px #0000000b}
+.auth-submit{transition:background .18s ease,transform .18s ease}
+.auth-submit:hover{background:#333;transform:translateY(-1px)}
+@media(max-width:900px){.quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){
+  body{background:#fff}
+  .app{background:#fff}
+  .topbar{position:relative;top:auto;background:#fff;padding:0 0 12px;border-bottom:0;margin-bottom:18px}
+  .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:16px}
+  .quick-action{padding:12px 10px;gap:8px}
+  .quick-action b{font-size:10px}
+  .quick-action small{font-size:8px;white-space:normal;line-height:1.35}
+  .quick-icon{width:30px;height:30px;flex-basis:30px}
+  .quick-arrow{display:none}
+  .product-tools{width:100%}
+  .product-tools input{flex:1;width:100%}
+  .product-tools select{flex:1}
+  .data-table th{font-size:9px}
+}
+
 </style>
 </head>
 <body>
@@ -135,6 +193,12 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       </div>
       <button class="btn" onclick="go('sales')">＋ Add a sale</button>
     </div>
+    <div class="quick-actions">
+      <button class="quick-action" onclick="showForm('productForm')"><span class="quick-icon">＋</span><span><b>Add product</b><small>Update your inventory</small></span><span class="quick-arrow">→</span></button>
+      <button class="quick-action" onclick="showForm('saleForm')"><span class="quick-icon">↗</span><span><b>Record sale</b><small>Automatically reduce stock</small></span><span class="quick-arrow">→</span></button>
+      <button class="quick-action" onclick="showForm('expenseForm')"><span class="quick-icon">↘</span><span><b>Add expense</b><small>Track business costs</small></span><span class="quick-arrow">→</span></button>
+      <button class="quick-action" onclick="go('reports')"><span class="quick-icon">▤</span><span><b>View reports</b><small>Check your performance</small></span><span class="quick-arrow">→</span></button>
+    </div>
     <div class="toolbar" style="justify-content:flex-end;margin:-5px 0 14px">
       <select id="periodFilter" onchange="render()" aria-label="Report period" style="border:1px solid #e5e3df;border-radius:11px;padding:10px 13px;background:#fff;color:#555;font-size:11px">
         <option value="all">All time overview</option>
@@ -182,27 +246,35 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     </div>
     <div class="card">
       <div class="toolbar">
-        <input id="productSearch" oninput="renderProductsSearch()" placeholder="Search products..." style="max-width:260px;width:100%;border:1px solid #e5e3df;border-radius:11px;padding:11px 13px;font-size:12px">
+        <div class="product-tools">
+          <input id="productSearch" oninput="renderProductsSearch()" placeholder="⌕  Search products..." aria-label="Search products">
+          <select id="stockFilter" onchange="renderProductsSearch()" aria-label="Filter stock status">
+            <option value="all">All stock</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="available">In stock</option>
+          </select>
+        </div>
         <span class="muted" id="productCount"></span>
       </div>
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>PRODUCT</th><th>BUY COST</th><th>SELL PRICE</th><th>STOCK</th><th>VALUE</th><th></th></tr></thead>
+          <thead><tr><th>PRODUCT / SKU</th><th>SIZE</th><th>COLOUR</th><th>BUY COST</th><th>SELL PRICE</th><th>STOCK</th><th>STOCK VALUE</th><th>ACTIONS</th></tr></thead>
           <tbody id="productsTable"></tbody>
         </table>
       </div>
       <div id="productsEmpty" class="empty">No products yet. Add your first product.</div>
     </div>
     <div class="card form-card" id="productForm" style="display:none;margin-top:16px">
-      <div class="card-head"><div class="card-title">Add new product</div><button class="btn light" onclick="hideForm('productForm')">Close</button></div>
+      <div class="card-head"><div class="card-title" id="productFormTitle">Add new product</div><button class="btn light" onclick="hideForm('productForm')">Close</button></div>
       <form onsubmit="addProduct(event)">
         <div class="form-grid">
           <div class="field full"><label>Product name</label><input id="pName" required placeholder="e.g. Oversized T-shirt"></div>
+          <div class="field"><label>SKU / Product code</label><input id="pSku" placeholder="e.g. MAR-TS-001"></div>
+          <div class="field"><label>Size</label><input id="pSize" placeholder="e.g. S, M, L, XL / Free Size"></div>
+          <div class="field"><label>Colour</label><input id="pColor" placeholder="e.g. Black"></div>
           <div class="field"><label>Buying cost (Rs.)</label><input id="pCost" type="number" min="0" step=".01" required></div>
           <div class="field"><label>Selling price (Rs.)</label><input id="pPrice" type="number" min="0" step=".01" required></div>
           <div class="field full"><label>Opening stock (units)</label><input id="pStock" type="number" min="0" step="1" required></div>
         </div>
-        <div class="form-actions"><button class="btn">Save product</button></div>
+        <div class="form-actions"><button class="btn" id="productSaveBtn">Save product</button><button class="btn light" type="button" onclick="resetProductForm()">Clear form</button></div><p class="stock-edit-hint">Tip: Use Edit to update details or adjust stock. Existing sales history remains unchanged.</p>
       </form>
     </div>
   </section>
@@ -467,23 +539,63 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => go(b.dataset.page)));
 
   function showForm(id) {
+    if (id === 'productForm' && !editingProductId) resetProductForm();
     document.getElementById(id).style.display = 'block';
     if (id === 'saleForm') fillProductSelect();
     document.getElementById(id).scrollIntoView({behavior: 'smooth', block: 'nearest'});
   }
   function hideForm(id) { document.getElementById(id).style.display = 'none'; }
 
+  let editingProductId = null;
+  function resetProductForm() {
+    const form = document.querySelector('#productForm form');
+    if (form) form.reset();
+    editingProductId = null;
+    document.getElementById('productFormTitle').textContent = 'Add new product';
+    document.getElementById('productSaveBtn').textContent = 'Save product';
+  }
+  function editProduct(id) {
+    const p = window.appData.products.find(x => x.id === id);
+    if (!p) return;
+    editingProductId = id;
+    document.getElementById('pName').value = p.name || '';
+    document.getElementById('pSku').value = p.sku || '';
+    document.getElementById('pSize').value = p.size || '';
+    document.getElementById('pColor').value = p.color || '';
+    document.getElementById('pCost').value = Number(p.cost || 0);
+    document.getElementById('pPrice').value = Number(p.price || 0);
+    document.getElementById('pStock').value = Number(p.stock || 0);
+    document.getElementById('productFormTitle').textContent = 'Edit product / Update stock';
+    document.getElementById('productSaveBtn').textContent = 'Update product';
+    showForm('productForm');
+  }
   function addProduct(e) {
     e.preventDefault();
-    window.appData.products.push({
-      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
-      name: document.getElementById('pName').value.trim(),
+    const sku = document.getElementById('pSku').value.trim();
+    const duplicateSku = sku && window.appData.products.some(p =>
+      String(p.sku || '').toLowerCase() === sku.toLowerCase() && p.id !== editingProductId
+    );
+    if (duplicateSku) return alert('This SKU / product code is already used. Please enter a unique code.');
+    const details = {
+      name: document.getElementById('pName').value.trim(), sku,
+      size: document.getElementById('pSize').value.trim(),
+      color: document.getElementById('pColor').value.trim(),
       cost: Number(document.getElementById('pCost').value),
       price: Number(document.getElementById('pPrice').value),
       stock: Number(document.getElementById('pStock').value)
-    });
-    e.target.reset();
+    };
+    if (Object.values(details).some(v => typeof v === 'number' && (!Number.isFinite(v) || v < 0)))
+      return alert('Please enter valid non-negative prices and stock.');
+    if (editingProductId) {
+      const product = window.appData.products.find(x => x.id === editingProductId);
+      if (!product) return alert('Product not found. Please refresh and try again.');
+      Object.assign(product, details);
+    } else {
+      window.appData.products.push({ id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()), ...details });
+    }
+    resetProductForm();
     hideForm('productForm');
+    window.render();
     window.saveToFirebase();
   }
 
@@ -601,7 +713,14 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     document.getElementById('profitNote').textContent = t.net < 0 ? 'Loss after costs and expenses' : 'Profit after costs and expenses';
     document.getElementById('stockCount').textContent = t.stock;
 
-    document.getElementById('productsTable').innerHTML = window.appData.products.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${money(p.stock*p.cost)}</td><td><button class="btn danger" onclick="del('products','${p.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('productsTable').innerHTML = window.appData.products.map(p => `<tr>
+      <td><b>${esc(p.name)}</b><span class="product-meta">${p.sku ? 'SKU: ' + esc(p.sku) : 'No SKU added'}</span></td>
+      <td>${esc(p.size || '—')}</td><td>${esc(p.color || '—')}</td>
+      <td>${money(p.cost)}</td><td>${money(p.price)}</td>
+      <td><span class="pill ${Number(p.stock) === 0 ? 'low' : Number(p.stock) < 5 ? 'low' : 'good'}">${Number(p.stock || 0)} units</span></td>
+      <td>${money(Number(p.stock || 0) * Number(p.cost || 0))}</td>
+      <td><div class="action-group"><button class="btn light" onclick="editProduct('${esc(p.id)}')">Edit</button><button class="btn danger" onclick="del('products','${esc(p.id)}')">Delete</button></div></td>
+    </tr>`).join('');
     document.getElementById('productsEmpty').style.display = window.appData.products.length ? 'none' : 'block';
     renderProductsSearch();
 
@@ -654,94 +773,8 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   }
 
   function renderProductsSearch() {
-    const q = (document.getElementById('productSearch')?.value || '').toLowerCase();
-    document.querySelectorAll('#productsTable tr').forEach(row => row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none');
-  }
-
-  function drawPNGReport() {
-    const canvas = document.getElementById('reportCanvas'); if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const W = 1200, H = 1500; canvas.width = W; canvas.height = H;
-    const t = totals();
-    const moneyTxt = n => 'LKR ' + Number(n||0).toLocaleString('en-LK', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    ctx.fillStyle = '#f6f5f2'; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#ffffff'; roundRect(ctx, 48, 42, W - 96, H - 84, 28); ctx.fill();
-    ctx.fillStyle = '#111111'; ctx.font = '700 58px Poppins, Arial'; ctx.fillText('MARCÉAU', 92, 145);
-    ctx.fillStyle = '#777777'; ctx.font = '500 18px Poppins, Arial'; ctx.fillText('CLOTHING BUSINESS · PERFORMANCE REPORT', 96, 184);
-    ctx.strokeStyle = '#e8e6e1'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(92, 222); ctx.lineTo(1108, 222); ctx.stroke();
-    ctx.fillStyle = '#111'; ctx.font = '600 24px Poppins, Arial'; ctx.fillText('BUSINESS SUMMARY', 92, 282);
-    ctx.fillStyle = '#888'; ctx.font = '16px Poppins, Arial'; ctx.fillText('Generated ' + new Date().toLocaleDateString('en-GB', {day: '2-digit', month: 'long', year: 'numeric'}), 92, 316);
-
-    const cards = [
-      ['TOTAL REVENUE', moneyTxt(t.revenue)],
-      ['TOTAL EXPENSES', moneyTxt(t.expenses)],
-      [t.net < 0 ? 'NET LOSS' : 'NET PROFIT', moneyTxt(Math.abs(t.net))],
-      ['UNITS SOLD', String(t.units)]
-    ];
-    const xs = [92, 606, 92, 606], ys = [370, 370, 540, 540];
-    cards.forEach((c, i) => {
-      ctx.fillStyle = '#f8f7f4'; roundRect(ctx, xs[i], ys[i], 502, 138, 18); ctx.fill();
-      ctx.fillStyle = '#777'; ctx.font = '600 15px Poppins, Arial'; ctx.fillText(c[0], xs[i] + 26, ys[i] + 42);
-      ctx.fillStyle = '#111'; ctx.font = '700 31px Poppins, Arial'; ctx.fillText(c[1], xs[i] + 26, ys[i] + 94);
-    });
-
-    ctx.fillStyle = '#111'; ctx.font = '600 24px Poppins, Arial'; ctx.fillText('PROFIT BREAKDOWN', 92, 758);
-    const breakdown = [
-      ['Sales revenue', t.revenue], ['Cost of goods sold', -t.cost], ['Gross profit', t.gross], ['Business expenses', -t.expenses], ['Net ' + (t.net < 0 ? 'loss' : 'profit'), t.net]
-    ];
-    let y = 812;
-    breakdown.forEach((r, i) => {
-      ctx.strokeStyle = '#eceae5'; ctx.beginPath(); ctx.moveTo(92, y + 18); ctx.lineTo(1108, y + 18); ctx.stroke();
-      ctx.fillStyle = i === 4 ? '#111' : '#555'; ctx.font = (i === 4 ? '700' : '500') + ' 19px Poppins, Arial'; ctx.fillText(r[0], 100, y);
-      ctx.textAlign = 'right'; ctx.fillStyle = r[1] < 0 ? '#a33' : '#111'; ctx.font = (i === 4 ? '700' : '600') + ' 19px Poppins, Arial'; ctx.fillText((r[1] < 0 ? '−' : '') + moneyTxt(Math.abs(r[1])), 1098, y); ctx.textAlign = 'left';
-      y += 58;
-    });
-
-    y += 28; ctx.fillStyle = '#111'; ctx.font = '600 24px Poppins, Arial'; ctx.fillText('STOCK OVERVIEW', 92, y); y += 48;
-    ctx.fillStyle = '#777'; ctx.font = '600 14px Poppins, Arial'; ctx.fillText('PRODUCT', 100, y); ctx.fillText('UNIT PRICE', 650, y); ctx.fillText('IN STOCK', 1000, y);
-    y += 28;
-    const items = window.appData.products.slice(0, 6);
-    if (!items.length) { ctx.fillStyle = '#999'; ctx.font = '17px Poppins, Arial'; ctx.fillText('No products added yet.', 100, y + 12); y += 48; }
-    items.forEach(p => {
-      ctx.strokeStyle = '#efede8'; ctx.beginPath(); ctx.moveTo(92, y + 15); ctx.lineTo(1108, y + 15); ctx.stroke();
-      ctx.fillStyle = '#333'; ctx.font = '500 17px Poppins, Arial'; ctx.fillText(String(p.name).slice(0, 34), 100, y);
-      ctx.fillText(moneyTxt(p.price), 650, y); ctx.fillText(String(p.stock), 1000, y); y += 48;
-    });
-
-    ctx.strokeStyle = '#e8e6e1'; ctx.beginPath(); ctx.moveTo(92, 1370); ctx.lineTo(1108, 1370); ctx.stroke();
-    ctx.fillStyle = '#777'; ctx.font = '500 14px Poppins, Arial'; ctx.fillText('MARCÉAU  ·  YOUR BUSINESS, IN CONTROL', 92, 1410);
-    ctx.textAlign='right'; ctx.fillText('PRIVATE BUSINESS REPORT', 1108, 1410); ctx.textAlign = 'left';
-  }
-
-  function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-
-  function downloadPNGReport() {
-    drawPNGReport();
-    const canvas = document.getElementById('reportCanvas');
-    const a = document.createElement('a'); a.download = 'marceau-business-report-' + dateNow() + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
-  }
-
-  function exportCSV() {
-    const rows = [
-      ['Type', 'Date', 'Description / Product', 'Category', 'Person', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
-      ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', '', s.qty || 0, s.price || 0, s.total || 0]),
-      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', '50% Thisara / 50% Dithira', '', '', x.amount || 0]),
-      ...window.appData.products.map(p => ['Stock', '', p.name || '', '', '', p.stock || 0, p.price || 0, Number(p.stock || 0) * Number(p.cost || 0)])
-    ];
-    const csv = rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'marceau-business-data-' + dateNow() + '.csv';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', {weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'});
-  document.getElementById('sideDate').textContent = new Date().toLocaleDateString();
-</script>
-</body>
-</html>
+    const q = (document.getElementById('productSearch')?.value || '').toLowerCase().trim();
+    const filter = document.getElementById('stockFilter')?.value || 'all';
+    const products = window.appData.products || [];
+    document.querySelectorAll('#productsTable tr').forEach((row, index) => {
+      const product = products[index];
