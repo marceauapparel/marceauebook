@@ -51,7 +51,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 /* Authentication */
 .auth-screen{position:fixed;inset:0;z-index:1000;background:#f7f7f7;display:flex;align-items:center;justify-content:center;padding:22px}
 .auth-card{width:min(100%,430px);background:#fff;border:1px solid #e9e9e9;border-radius:24px;padding:34px;box-shadow:0 20px 70px #0000000c}
-.auth-brand{text-align:center;font-size:29px;font-weight:800;letter-spacing:5px;margin:4px 0}
+.auth-brand{text-align:center;margin:0 auto 4px}.auth-logo{display:block;width:min(100%,180px);height:68px;object-fit:contain;margin:0 auto}
 .auth-kicker{text-align:center;color:#888;font-size:10px;letter-spacing:3px;margin:7px 0 28px}
 .auth-title{font-size:23px;font-weight:700;margin:0 0 7px}
 .auth-copy{font-size:12px;color:#888;margin:0 0 23px;line-height:1.7}
@@ -76,7 +76,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 <body>
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
-    <div class="auth-brand">MARCEAU</div>
+    <div class="auth-brand"><img class="auth-logo" src="https://raw.githubusercontent.com/marceauapparel/marceauassest/main/Logo.png" alt="MARCEAU logo"></div>
     <div class="auth-kicker">CLOTHING MANAGEMENT</div>
     <h1 class="auth-title" id="authTitle">Welcome back</h1>
     <p class="auth-copy" id="authCopy">Sign in to access your MARCEAU business dashboard.</p>
@@ -249,7 +249,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     <div class="card">
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>DATE</th><th>DESCRIPTION</th><th>CATEGORY</th><th>PERSON</th><th>AMOUNT</th><th></th></tr></thead>
+          <thead><tr><th>DATE</th><th>DESCRIPTION</th><th>CATEGORY</th><th>THISARA · 50%</th><th>DITHIRA · 50%</th><th>TOTAL</th><th></th></tr></thead>
           <tbody id="expensesTable"></tbody>
         </table>
       </div>
@@ -261,7 +261,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
         <div class="form-grid">
           <div class="field full"><label>Description</label><input id="eDesc" required placeholder="e.g. Packaging, delivery, ads"></div>
           <div class="field"><label>Category</label><select id="eCategory"><option>Stock / Supplies</option><option>Delivery</option><option>Marketing</option><option>Rent</option><option>Utilities</option><option>Other</option></select></div>
-          <div class="field"><label>Expense belongs to</label><select id="ePerson" required><option value="Thisara">Thisara</option><option value="Dithira">Dithira</option></select></div>
           <div class="field"><label>Amount (Rs.)</label><input id="eAmount" type="number" min=".01" step=".01" required></div>
         </div>
         <div class="form-actions"><button class="btn">Save expense</button></div>
@@ -540,7 +539,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
       desc: document.getElementById('eDesc').value.trim(),
       category: document.getElementById('eCategory').value,
-      person: document.getElementById('ePerson').value,
       amount: Number(document.getElementById('eAmount').value),
       date: dateNow()
     });
@@ -610,10 +608,12 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     document.getElementById('salesTable').innerHTML = window.appData.sales.map(s => `<tr><td>${niceDate(s.date)}</td><td>${esc(s.name)}</td><td>${s.qty}</td><td>${money(s.price)}</td><td><b>${money(s.total)}</b></td><td><button class="btn danger" onclick="del('sales','${s.id}')">Delete</button></td></tr>`).join('');
     document.getElementById('salesEmpty').style.display = window.appData.sales.length ? 'none' : 'block';
 
-    document.getElementById('expensesTable').innerHTML = window.appData.expenses.map(x => `<tr><td>${niceDate(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.category)}</td><td>${esc(x.person || 'Unassigned')}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger" onclick="del('expenses','${x.id}')">Delete</button></td></tr>`).join('');
+    const totalExpenseAll = window.appData.expenses.reduce((a,x) => a + Number(x.amount || 0), 0);
+    const halfExpenseAll = totalExpenseAll / 2;
+    document.getElementById('expensesTable').innerHTML = window.appData.expenses.map(x => { const half = Number(x.amount || 0) / 2; return `<tr><td>${niceDate(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.category)}</td><td>${money(half)}</td><td>${money(half)}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger" onclick="del('expenses','${x.id}')">Delete</button></td></tr>`; }).join('');
     document.getElementById('expensesEmpty').style.display = window.appData.expenses.length ? 'none' : 'block';
-    document.getElementById('thisaraExpenses').textContent = money(window.appData.expenses.filter(x => x.person === 'Thisara').reduce((a,x) => a + Number(x.amount || 0), 0));
-    document.getElementById('dithiraExpenses').textContent = money(window.appData.expenses.filter(x => x.person === 'Dithira').reduce((a,x) => a + Number(x.amount || 0), 0));
+    document.getElementById('thisaraExpenses').textContent = money(halfExpenseAll);
+    document.getElementById('dithiraExpenses').textContent = money(halfExpenseAll);
 
     let preview = window.appData.products.slice(0, 5);
     document.getElementById('stockPreview').innerHTML = preview.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="pill ${p.stock===0?'low':p.stock<5?'low':'good'}">${p.stock===0?'Out of stock':p.stock<5?'Low stock':'In stock'}</span></td></tr>`).join('') || '<tr><td colspan="4" class="empty">Add products to see stock status.</td></tr>';
@@ -725,7 +725,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     const rows = [
       ['Type', 'Date', 'Description / Product', 'Category', 'Person', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
       ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', '', s.qty || 0, s.price || 0, s.total || 0]),
-      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', x.person || 'Unassigned', '', '', x.amount || 0]),
+      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', '50% Thisara / 50% Dithira', '', '', x.amount || 0]),
       ...window.appData.products.map(p => ['Stock', '', p.name || '', '', '', p.stock || 0, p.price || 0, Number(p.stock || 0) * Number(p.cost || 0)])
     ];
     const csv = rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
