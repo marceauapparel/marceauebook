@@ -46,9 +46,51 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 .sync-indicator.syncing{color:#a34b12;background:#fff1e7}
 @media(max-width:900px){.sidebar{width:210px}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
 @media(max-width:620px){.app{display:block;padding-bottom:76px}.sidebar{display:none}main{padding:20px 15px 30px}.topbar{margin-bottom:22px}.brand-mobile{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 15px;margin-bottom:18px;border-bottom:1px solid var(--line)}.brand-mobile img{display:block;width:auto;height:42px;max-width:155px;object-fit:contain;filter:none;mix-blend-mode:normal}.brand-mobile span{font-size:9px;letter-spacing:2px;color:#888;font-weight:600;white-space:nowrap}.date-chip{font-size:10px;padding:8px 10px}.welcome{align-items:start;flex-direction:column}.welcome .btn{width:100%}.stats{gap:10px}.card{padding:15px;border-radius:15px}.stat-value{font-size:22px}.grid2{gap:12px}.chart{height:180px}.mobile-nav{display:flex;position:fixed;z-index:5;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -5px 20px #00000008}.mobile-nav button{border:0;background:transparent;color:#777;font-size:9px;display:grid;justify-items:center;gap:3px;padding:5px 8px}.mobile-nav button.active{color:#111;font-weight:700}.mobile-nav b{font-size:17px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar .btn{flex:1}.footer{margin-bottom:8px}}
+
+body:not(.authenticated) .mobile-nav{display:none!important}
+/* Authentication */
+.auth-screen{position:fixed;inset:0;z-index:1000;background:#f7f7f7;display:flex;align-items:center;justify-content:center;padding:22px}
+.auth-card{width:min(100%,430px);background:#fff;border:1px solid #e9e9e9;border-radius:24px;padding:34px;box-shadow:0 20px 70px #0000000c}
+.auth-brand{text-align:center;font-size:29px;font-weight:800;letter-spacing:5px;margin:4px 0}
+.auth-kicker{text-align:center;color:#888;font-size:10px;letter-spacing:3px;margin:7px 0 28px}
+.auth-title{font-size:23px;font-weight:700;margin:0 0 7px}
+.auth-copy{font-size:12px;color:#888;margin:0 0 23px;line-height:1.7}
+.auth-form{display:grid;gap:14px}
+.auth-form label{font-size:11px;color:#666;display:grid;gap:7px}
+.auth-form input{width:100%;padding:13px;border:1px solid #ddd;border-radius:11px;outline:none}
+.auth-form input:focus{border-color:#111}
+.auth-submit{width:100%;padding:13px;border:0;border-radius:11px;background:#111;color:#fff;font-weight:600}
+.auth-switch{border:0;background:none;text-decoration:underline;color:#555;font-size:11px;padding:12px 0 0;width:100%}
+.auth-error{color:#b42318;background:#fff1f0;border-radius:10px;padding:10px;font-size:11px;display:none;line-height:1.5}
+.auth-note{font-size:10px;color:#999;text-align:center;line-height:1.6;margin:18px 0 0}
+#appShell[hidden],#authScreen[hidden]{display:none!important}
+.user-tools{display:flex;align-items:center;gap:10px}
+.user-chip{font-size:11px;color:#666;border:1px solid var(--line);border-radius:999px;padding:8px 11px}
+.person-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.person-box{border:1px solid var(--line);border-radius:12px;padding:13px}
+.person-box span{display:block;font-size:10px;color:#888}
+.person-box b{display:block;font-size:17px;margin-top:5px}
+@media(max-width:620px){.auth-card{padding:26px 21px}.user-tools{gap:5px}.user-chip{font-size:9px;padding:7px 8px}}
 </style>
 </head>
 <body>
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-brand">MARCEAU</div>
+    <div class="auth-kicker">CLOTHING MANAGEMENT</div>
+    <h1 class="auth-title" id="authTitle">Welcome back</h1>
+    <p class="auth-copy" id="authCopy">Sign in to access your MARCEAU business dashboard.</p>
+    <form class="auth-form" id="authForm">
+      <label>User ID<input id="authUser" autocomplete="username" minlength="3" maxlength="30" required placeholder="Enter your user ID"></label>
+      <label>Password<input id="authPass" type="password" autocomplete="current-password" minlength="6" required placeholder="Enter your password"></label>
+      <div class="auth-error" id="authError" role="alert"></div>
+      <button class="auth-submit" id="authSubmit" type="submit">Sign in</button>
+    </form>
+    <button class="auth-switch" id="authSwitch" type="button">Create a new account</button>
+    <p class="auth-note">Your account uses a User ID — no email address needed.<br>Keep your password private.</p>
+  </div>
+</div>
+<div id="appShell" hidden>
 <div class="app">
 <aside class="sidebar">
   <div class="brand-wrap">
@@ -80,7 +122,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
       <div class="eyebrow">MARCEAU / BUSINESS</div>
       <h1 class="page-title" id="pageTitle">Overview</h1>
     </div>
-    <div class="date-chip" id="today"></div>
+    <div class="user-tools"><span class="user-chip" id="signedInAs"></span><button class="btn light" type="button" onclick="signOutUser()">Log out</button><span class="date-chip" id="today"></span></div>
   </header>
 
   <!-- OVERVIEW SECTION -->
@@ -200,10 +242,14 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
       <div><div class="eyebrow">OUTGOINGS</div><h2 class="page-title" style="font-size:22px">Expenses</h2></div>
       <button class="btn" onclick="showForm('expenseForm')">＋ Add expense</button>
     </div>
+    <div class="person-summary">
+      <div class="person-box"><span>THISARA'S EXPENSES</span><b id="thisaraExpenses">Rs. 0.00</b></div>
+      <div class="person-box"><span>DITHIRA'S EXPENSES</span><b id="dithiraExpenses">Rs. 0.00</b></div>
+    </div>
     <div class="card">
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>DATE</th><th>DESCRIPTION</th><th>CATEGORY</th><th>AMOUNT</th><th></th></tr></thead>
+          <thead><tr><th>DATE</th><th>DESCRIPTION</th><th>CATEGORY</th><th>PERSON</th><th>AMOUNT</th><th></th></tr></thead>
           <tbody id="expensesTable"></tbody>
         </table>
       </div>
@@ -215,6 +261,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
         <div class="form-grid">
           <div class="field full"><label>Description</label><input id="eDesc" required placeholder="e.g. Packaging, delivery, ads"></div>
           <div class="field"><label>Category</label><select id="eCategory"><option>Stock / Supplies</option><option>Delivery</option><option>Marketing</option><option>Rent</option><option>Utilities</option><option>Other</option></select></div>
+          <div class="field"><label>Expense belongs to</label><select id="ePerson" required><option value="Thisara">Thisara</option><option value="Dithira">Dithira</option></select></div>
           <div class="field"><label>Amount (Rs.)</label><input id="eAmount" type="number" min=".01" step=".01" required></div>
         </div>
         <div class="form-actions"><button class="btn">Save expense</button></div>
@@ -250,6 +297,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
   <div class="footer">MARCEAU · YOUR BUSINESS, IN CONTROL</div>
 </main>
 </div>
+</div>
 
 <nav class="mobile-nav" id="mobileNav">
   <button class="active" data-page="overview"><b>▦</b>Home</button>
@@ -263,8 +311,8 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
-  // Your actual Firebase credentials
   const firebaseConfig = {
     apiKey: "AIzaSyAwn4m-dX-Bx9OGfArrysNrKnBeioRTaOA",
     authDomain: "marceauebook.firebaseapp.com",
@@ -278,35 +326,114 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+  const auth = getAuth(app);
   const dbRef = ref(db, 'marceau_data');
-
+  let stopDataListener = null;
   window.appData = { products: [], sales: [], expenses: [] };
   const asArray = value => Array.isArray(value) ? value : (value && typeof value === 'object' ? Object.values(value) : []);
+  const usernameEmail = username => username.trim().toLowerCase() + '@marceau-login.com';
 
-  // Listen for Realtime Changes. A missing database node is a valid empty account.
-  onValue(dbRef, (snapshot) => {
-    const data = snapshot.val() || {};
-    window.appData = {
-      products: asArray(data.products),
-      sales: asArray(data.sales),
-      expenses: asArray(data.expenses)
+  const authForm = document.getElementById('authForm');
+  const authSwitch = document.getElementById('authSwitch');
+  let creatingAccount = false;
+  function showAuthError(message) {
+    const box = document.getElementById('authError');
+    box.textContent = message;
+    box.style.display = 'block';
+  }
+  function firebaseError(error) {
+    const code = error?.code || '';
+    const messages = {
+      'auth/invalid-credential':'Incorrect User ID or password.',
+      'auth/user-not-found':'Account not found. Create an account first.',
+      'auth/wrong-password':'Incorrect password.',
+      'auth/email-already-in-use':'That User ID is already registered. Sign in instead.',
+      'auth/weak-password':'Password must contain at least 6 characters.',
+      'auth/invalid-email':'Please enter a valid User ID.',
+      'auth/too-many-requests':'Too many attempts. Please wait and try again.',
+      'auth/network-request-failed':'Network error. Check your internet connection.',
+      'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase Authentication. Enable it in Firebase Console.',
+      'auth/unauthorized-domain':'This website domain is not authorized in Firebase Authentication settings.'
     };
-    window.render();
-    const status = document.getElementById('syncStatus');
-    status.classList.remove('syncing');
-    status.textContent = '● Connected (Live)';
-  }, (error) => {
-    console.error('Firebase connection error:', error);
-    const status = document.getElementById('syncStatus');
-    status.classList.remove('syncing');
-    status.textContent = '● Connection Error';
+    return messages[code] || ('Unable to continue: ' + (error?.message || 'Unknown error'));
+  }
+
+  authSwitch.addEventListener('click', () => {
+    creatingAccount = !creatingAccount;
+    document.getElementById('authTitle').textContent = creatingAccount ? 'Create your account' : 'Welcome back';
+    document.getElementById('authCopy').textContent = creatingAccount ? 'Choose a User ID and password to create your MARCEAU account.' : 'Sign in to access your MARCEAU business dashboard.';
+    document.getElementById('authSubmit').textContent = creatingAccount ? 'Create account' : 'Sign in';
+    authSwitch.textContent = creatingAccount ? 'Already have an account? Sign in' : 'Create a new account';
+    document.getElementById('authPass').autocomplete = creatingAccount ? 'new-password' : 'current-password';
+    document.getElementById('authError').style.display = 'none';
   });
 
-  // Save Function to Firebase
+  authForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const username = document.getElementById('authUser').value.trim();
+    const password = document.getElementById('authPass').value;
+    const submit = document.getElementById('authSubmit');
+    if (!/^[a-zA-Z0-9._-]{3,30}$/.test(username)) {
+      showAuthError('User ID must be 3–30 characters and use only letters, numbers, dots, underscores or hyphens.');
+      return;
+    }
+    submit.disabled = true;
+    submit.textContent = creatingAccount ? 'Creating account…' : 'Signing in…';
+    document.getElementById('authError').style.display = 'none';
+    try {
+      const email = usernameEmail(username);
+      if (creatingAccount) await createUserWithEmailAndPassword(auth, email, password);
+      else await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      showAuthError(firebaseError(error));
+    } finally {
+      submit.disabled = false;
+      submit.textContent = creatingAccount ? 'Create account' : 'Sign in';
+    }
+  });
+
+  onAuthStateChanged(auth, user => {
+    if (stopDataListener) { stopDataListener(); stopDataListener = null; }
+    if (!user) {
+      document.body.classList.remove('authenticated');
+      document.getElementById('authScreen').hidden = false;
+      document.getElementById('appShell').hidden = true;
+      window.appData = { products: [], sales: [], expenses: [] };
+      return;
+    }
+    document.body.classList.add('authenticated');
+    document.getElementById('authScreen').hidden = true;
+    document.getElementById('appShell').hidden = false;
+    document.getElementById('signedInAs').textContent = 'ID: ' + (user.email || '').split('@')[0];
+    const status = document.getElementById('syncStatus');
+    status.textContent = '● Connecting…';
+    stopDataListener = onValue(dbRef, snapshot => {
+      const data = snapshot.val() || {};
+      window.appData = {
+        products: asArray(data.products),
+        sales: asArray(data.sales),
+        expenses: asArray(data.expenses)
+      };
+      window.render();
+      status.classList.remove('syncing');
+      status.textContent = '● Connected (Live)';
+    }, error => {
+      console.error('Firebase connection error:', error);
+      status.classList.remove('syncing');
+      status.textContent = '● Connection Error';
+      alert('Could not load business data. Check Firebase Realtime Database rules and your connection.');
+    });
+  });
+
+  window.signOutUser = async function() {
+    try { await signOut(auth); }
+    catch (error) { alert('Could not log out: ' + firebaseError(error)); }
+  };
+
   window.saveToFirebase = async function() {
     const status = document.getElementById('syncStatus');
     status.classList.add('syncing');
-    status.textContent = '● Syncing...';
+    status.textContent = '● Syncing…';
     try {
       await set(dbRef, window.appData);
       status.classList.remove('syncing');
@@ -315,7 +442,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
       console.error('Firebase save error:', error);
       status.classList.remove('syncing');
       status.textContent = '● Save Failed';
-      alert('Data save failed. Please check your connection and Firebase permissions.');
+      alert('Data save failed. Check Firebase Realtime Database rules and your internet connection.');
     }
   };
 </script>
@@ -413,6 +540,7 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
       id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
       desc: document.getElementById('eDesc').value.trim(),
       category: document.getElementById('eCategory').value,
+      person: document.getElementById('ePerson').value,
       amount: Number(document.getElementById('eAmount').value),
       date: dateNow()
     });
@@ -482,8 +610,10 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
     document.getElementById('salesTable').innerHTML = window.appData.sales.map(s => `<tr><td>${niceDate(s.date)}</td><td>${esc(s.name)}</td><td>${s.qty}</td><td>${money(s.price)}</td><td><b>${money(s.total)}</b></td><td><button class="btn danger" onclick="del('sales','${s.id}')">Delete</button></td></tr>`).join('');
     document.getElementById('salesEmpty').style.display = window.appData.sales.length ? 'none' : 'block';
 
-    document.getElementById('expensesTable').innerHTML = window.appData.expenses.map(x => `<tr><td>${niceDate(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.category)}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger" onclick="del('expenses','${x.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('expensesTable').innerHTML = window.appData.expenses.map(x => `<tr><td>${niceDate(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.category)}</td><td>${esc(x.person || 'Unassigned')}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger" onclick="del('expenses','${x.id}')">Delete</button></td></tr>`).join('');
     document.getElementById('expensesEmpty').style.display = window.appData.expenses.length ? 'none' : 'block';
+    document.getElementById('thisaraExpenses').textContent = money(window.appData.expenses.filter(x => x.person === 'Thisara').reduce((a,x) => a + Number(x.amount || 0), 0));
+    document.getElementById('dithiraExpenses').textContent = money(window.appData.expenses.filter(x => x.person === 'Dithira').reduce((a,x) => a + Number(x.amount || 0), 0));
 
     let preview = window.appData.products.slice(0, 5);
     document.getElementById('stockPreview').innerHTML = preview.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="pill ${p.stock===0?'low':p.stock<5?'low':'good'}">${p.stock===0?'Out of stock':p.stock<5?'Low stock':'In stock'}</span></td></tr>`).join('') || '<tr><td colspan="4" class="empty">Add products to see stock status.</td></tr>';
@@ -593,10 +723,10 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 
   function exportCSV() {
     const rows = [
-      ['Type', 'Date', 'Description / Product', 'Category', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
-      ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', s.qty || 0, s.price || 0, s.total || 0]),
-      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', '', '', x.amount || 0]),
-      ...window.appData.products.map(p => ['Stock', '', p.name || '', '', p.stock || 0, p.price || 0, Number(p.stock || 0) * Number(p.cost || 0)])
+      ['Type', 'Date', 'Description / Product', 'Category', 'Person', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
+      ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', '', s.qty || 0, s.price || 0, s.total || 0]),
+      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', x.person || 'Unassigned', '', '', x.amount || 0]),
+      ...window.appData.products.map(p => ['Stock', '', p.name || '', '', '', p.stock || 0, p.price || 0, Number(p.stock || 0) * Number(p.cost || 0)])
     ];
     const csv = rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
