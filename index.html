@@ -71,6 +71,38 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 .person-box span{display:block;font-size:10px;color:#888}
 .person-box b{display:block;font-size:17px;margin-top:5px}
 @media(max-width:620px){.auth-card{padding:26px 21px}.user-tools{gap:5px}.user-chip{font-size:9px;padding:7px 8px}}
+
+
+/* MARCEAU UI refinement — presentation only; Firebase/database logic untouched */
+:root{--ink:#111;--muted:#777;--line:#e9e9e9;--soft:#f7f7f7;--white:#fff;--radius:18px;--shadow:0 10px 30px rgba(17,17,17,.045)}
+body{background:#fafafa;color:var(--ink);letter-spacing:.02px}
+.sidebar{background:#fff;border-right:1px solid #ededed;box-shadow:8px 0 28px rgba(0,0,0,.018);padding:30px 18px}
+.brand-wrap{padding:4px 8px 10px}.brand-logo{height:82px;max-width:190px;margin:auto}
+.brand-sub{letter-spacing:2.5px;font-size:9px}
+.nav{gap:6px}.nav button{padding:13px 15px;border:1px solid transparent;transition:background .18s ease,color .18s ease,transform .18s ease}.nav button:hover{transform:translateX(2px);background:#f4f4f4;color:#111}.nav button.active{background:#111;color:#fff;box-shadow:0 7px 16px rgba(0,0,0,.12)}
+.side-note{background:#fbfbfb;border-color:#eee}
+main{padding-top:34px}
+.topbar{padding:0 0 20px;border-bottom:1px solid #ededed;margin-bottom:28px}
+.eyebrow{font-size:10px;letter-spacing:2.2px;font-weight:600;color:#929292}
+.page-title{letter-spacing:-1.15px;line-height:1.18}
+.date-chip,.user-chip{background:#fff;border-color:#e8e8e8;box-shadow:0 2px 8px rgba(0,0,0,.025)}
+.card{border-color:#ebebeb;box-shadow:var(--shadow);transition:box-shadow .2s ease,border-color .2s ease}
+.card:hover{border-color:#dedede;box-shadow:0 13px 34px rgba(17,17,17,.065)}
+.stats .card{position:relative;overflow:hidden;padding:21px 20px}.stats .card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#171717;opacity:.85}
+.stat-label{font-size:10px;letter-spacing:1.1px;font-weight:600}.stat-value{font-size:clamp(22px,2.5vw,31px);line-height:1.2;margin:12px 0 6px}.stat-foot{font-size:10px;color:#999}
+.card-head{margin-bottom:18px}.card-title{letter-spacing:.1px}
+.chart{border-bottom-color:#e8e8e8}.bar{transition:height .25s ease,opacity .2s ease}.bar:hover{opacity:.72}
+.btn{border-radius:10px;padding:11px 17px;letter-spacing:.1px;box-shadow:0 3px 9px rgba(0,0,0,.07);transition:transform .16s ease,box-shadow .16s ease,background .16s ease}.btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,0,0,.12)}.btn:active{transform:translateY(0)}.btn.light{box-shadow:none;background:#fff}.btn.light:hover{background:#f5f5f5}
+.data-table{border-collapse:separate;border-spacing:0}.data-table th{background:#fafafa;color:#858585;letter-spacing:1px;font-weight:600;font-size:9px}.data-table th:first-child{border-radius:8px 0 0 0}.data-table th:last-child{border-radius:0 8px 0 0}.data-table td{font-size:11px}.data-table tbody tr{transition:background .15s ease}.data-table tbody tr:hover{background:#fafafa}.data-table td{border-bottom:1px solid #f0f0f0}
+.pill{font-weight:600;letter-spacing:.15px}.toolbar input,.toolbar select,.field input,.field select{transition:border-color .16s ease,box-shadow .16s ease}.toolbar input:focus,.toolbar select:focus,.field input:focus,.field select:focus{border-color:#999!important;box-shadow:0 0 0 3px rgba(0,0,0,.045)}
+.field label{font-weight:600;letter-spacing:.15px}.field input,.field select{min-height:44px;background:#fff}.form-card{border-color:#e5e5e5}.form-actions{padding-top:4px}
+.person-summary{gap:14px}.person-box{background:#fff;box-shadow:0 5px 16px rgba(0,0,0,.025);padding:16px}.person-box span{letter-spacing:1px;font-weight:600}.person-box b{font-size:19px;letter-spacing:-.4px}
+.auth-screen{background:radial-gradient(ellipse at 50% 0%,#fff 0%,#f7f7f7 68%)}.auth-card{border-color:#ededed;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.075);padding:36px}.auth-logo{width:min(100%,176px);height:70px}.auth-kicker{font-size:9px;letter-spacing:3.2px;color:#999}.auth-title{letter-spacing:-.7px}.auth-form input{min-height:46px;transition:border-color .16s ease,box-shadow .16s ease}.auth-form input:focus{border-color:#999;box-shadow:0 0 0 3px rgba(0,0,0,.045)}.auth-submit{min-height:46px;transition:transform .16s ease,background .16s ease}.auth-submit:hover{background:#292929;transform:translateY(-1px)}
+.sync-indicator{font-size:10px;letter-spacing:.1px}
+@media(max-width:900px){.sidebar{padding:24px 14px}main{padding-top:26px}}
+@media(max-width:620px){body{background:#fafafa}main{padding:16px 13px 28px}.brand-mobile{background:#fff;padding:10px 12px 14px;border:1px solid #eee;border-radius:14px;margin-bottom:17px}.brand-mobile img{height:39px}.topbar{padding-bottom:16px;margin-bottom:20px}.stats .card{padding:15px 13px}.stats .card:before{width:2px}.stat-label{font-size:9px;letter-spacing:.7px}.stat-value{font-size:20px;margin:9px 0 4px}.card{box-shadow:0 5px 18px rgba(0,0,0,.035)}.person-box{padding:13px}.person-box b{font-size:16px}.mobile-nav{background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-top:1px solid #eaeaea;box-shadow:0 -8px 24px rgba(0,0,0,.055)}.mobile-nav button{min-width:54px}.mobile-nav button.active{background:#f3f3f3;border-radius:10px}.auth-screen{padding:16px}.auth-card{padding:27px 21px;border-radius:19px}.auth-logo{width:min(100%,165px);height:65px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
@@ -699,49 +731,3 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 
     y += 28; ctx.fillStyle = '#111'; ctx.font = '600 24px Poppins, Arial'; ctx.fillText('STOCK OVERVIEW', 92, y); y += 48;
     ctx.fillStyle = '#777'; ctx.font = '600 14px Poppins, Arial'; ctx.fillText('PRODUCT', 100, y); ctx.fillText('UNIT PRICE', 650, y); ctx.fillText('IN STOCK', 1000, y);
-    y += 28;
-    const items = window.appData.products.slice(0, 6);
-    if (!items.length) { ctx.fillStyle = '#999'; ctx.font = '17px Poppins, Arial'; ctx.fillText('No products added yet.', 100, y + 12); y += 48; }
-    items.forEach(p => {
-      ctx.strokeStyle = '#efede8'; ctx.beginPath(); ctx.moveTo(92, y + 15); ctx.lineTo(1108, y + 15); ctx.stroke();
-      ctx.fillStyle = '#333'; ctx.font = '500 17px Poppins, Arial'; ctx.fillText(String(p.name).slice(0, 34), 100, y);
-      ctx.fillText(moneyTxt(p.price), 650, y); ctx.fillText(String(p.stock), 1000, y); y += 48;
-    });
-
-    ctx.strokeStyle = '#e8e6e1'; ctx.beginPath(); ctx.moveTo(92, 1370); ctx.lineTo(1108, 1370); ctx.stroke();
-    ctx.fillStyle = '#777'; ctx.font = '500 14px Poppins, Arial'; ctx.fillText('MARCÉAU  ·  YOUR BUSINESS, IN CONTROL', 92, 1410);
-    ctx.textAlign='right'; ctx.fillText('PRIVATE BUSINESS REPORT', 1108, 1410); ctx.textAlign = 'left';
-  }
-
-  function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-
-  function downloadPNGReport() {
-    drawPNGReport();
-    const canvas = document.getElementById('reportCanvas');
-    const a = document.createElement('a'); a.download = 'marceau-business-report-' + dateNow() + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
-  }
-
-  function exportCSV() {
-    const rows = [
-      ['Type', 'Date', 'Description / Product', 'Category', 'Person', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
-      ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', '', s.qty || 0, s.price || 0, s.total || 0]),
-      ...window.appData.expenses.map(x => ['Expense', x.date || '', x.desc || '', x.category || '', '50% Thisara / 50% Dithira', '', '', x.amount || 0]),
-      ...window.appData.products.map(p => ['Stock', '', p.name || '', '', '', p.stock || 0, p.price || 0, Number(p.stock || 0) * Number(p.cost || 0)])
-    ];
-    const csv = rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'marceau-business-data-' + dateNow() + '.csv';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  document.getElementById('today').textContent = new Date().toLocaleDateString('en-GB', {weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'});
-  document.getElementById('sideDate').textContent = new Date().toLocaleDateString();
-</script>
-</body>
-</html>
