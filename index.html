@@ -44,15 +44,15 @@ main{flex:1;min-width:0;padding:30px clamp(18px,4vw,54px) 50px;max-width:1600px;
 .form-actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}.empty{text-align:center;color:#999;padding:32px 12px;font-size:12px}
 .mobile-nav{display:none}.brand-mobile{display:none}.mobile-logo-fallback{display:none;font-size:20px;letter-spacing:3px}
 .footer{font-size:10px;color:#aaa;text-align:center;margin-top:30px}
-.sync-indicator{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#216e3a;background:#e9f5ed;padding:6px 12px;border-radius:999px;font-weight:500}
+.sync-indicator{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#216e3a;background:#e9f5ed;padding:6px 12px;border-radius:99px;font-weight:500}
 .sync-indicator.syncing{color:#a34b12;background:#fff1e7}
 
-/* Print specific styles for Waybill */
+/* Quarter-A4 Waybill Print Layout (Exact A6 / Quarter A4 dimension) */
 @media print {
   body * { visibility: hidden; }
   #waybillModal, #waybillModal * { visibility: visible; }
   #waybillModal { position: fixed; inset: 0; background: #fff !important; display: flex !important; align-items: center; justify-content: center; padding: 0; z-index: 9999; }
-  #waybillModal > div { box-shadow: none !important; border: 2px solid #111 !important; max-width: 100% !important; width: 400px !important; padding: 20px !important; }
+  #waybillModal > div { box-shadow: none !important; border: 2px solid #111 !important; width: 148mm !important; height: 105mm !important; max-width: none !important; padding: 12mm !important; margin: auto; }
   .modal-hide-print { display: none !important; }
 }
 
@@ -284,7 +284,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     </div>
   </section>
 
-  <!-- REPORTS SECTION (Upgraded clean dashboard view) -->
+  <!-- REPORTS SECTION -->
   <section class="section" id="reports">
     <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg, #111 0%, #222 100%);color:#fff;border:0;">
       <div class="card-head">
@@ -323,13 +323,13 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   <button data-page="reports"><b>▤</b>Reports</button>
 </nav>
 
-<!-- PROFESSIONAL WAYBILL & BARCODE MODAL POPUP -->
+<!-- PROFESSIONAL QUARTER-A4 WAYBILL & BARCODE MODAL POPUP -->
 <div id="waybillModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="background:#fff;border-radius:20px;max-width:520px;width:100%;padding:28px;box-shadow:0 25px 50px rgba(0,0,0,0.25);max-height:92vh;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px;max-width:560px;width:100%;padding:28px;box-shadow:0 25px 50px rgba(0,0,0,0.25);max-height:95vh;overflow-y:auto;">
     <div class="modal-hide-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
       <div>
         <h3 style="margin:0;font-size:20px;font-weight:700;">Create Shipping Waybill</h3>
-        <p style="margin:2px 0 0;font-size:11px;color:#777;">Fill recipient details and print courier label</p>
+        <p style="margin:2px 0 0;font-size:11px;color:#777;">Quarter-A4 (A6 Standard) Courier Label</p>
       </div>
       <button class="btn light" onclick="closeWaybillModal()" style="padding:6px 12px;">✕</button>
     </div>
@@ -379,8 +379,8 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       </div>
     </div>
 
-    <!-- Beautiful Rendered Waybill Preview -->
-    <div id="waybillContent" style="border:2px solid #111;padding:20px;border-radius:14px;margin-bottom:20px;background:#fff;font-family:Poppins,sans-serif;">
+    <!-- Perfect Quarter-A4 Waybill Preview Container -->
+    <div id="waybillContent" style="border:2px solid #111;padding:16px;border-radius:12px;margin-bottom:20px;background:#fff;font-family:Poppins,sans-serif;width:100%;">
       <!-- Dynamic Waybill Card -->
     </div>
 
@@ -685,10 +685,10 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   function updateWaybillPreview() {
     const p = window.appData.products.find(x => x.id === currentWaybillProductId);
     if(!p) return;
-    const name = document.getElementById('wbCustName').value.trim() || '[Customer Name]';
-    const phone = document.getElementById('wbCustPhone').value.trim() || '[Phone]';
-    const address = document.getElementById('wbCustAddress').value.trim() || '[Delivery Address]';
-    const city = document.getElementById('wbCustCity').value.trim() || '[City]';
+    const name = document.getElementById('wbCustName').value.trim() || 'Kasun Perera';
+    const phone = document.getElementById('wbCustPhone').value.trim() || '071 234 5678';
+    const address = document.getElementById('wbCustAddress').value.trim() || 'No 45, Main Street';
+    const city = document.getElementById('wbCustCity').value.trim() || 'Kurunegala';
     const color = document.getElementById('wbColor').value;
     const size = document.getElementById('wbSize').value;
     const qty = document.getElementById('wbQty').value || 1;
@@ -698,41 +698,43 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     const barcodeText = `MAR/${color}/${size}/${orderNum}`;
 
     document.getElementById('waybillContent').innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:10px;">
         <div>
-          <div style="font-weight:800;font-size:18px;letter-spacing:1px;">MARCEAU</div>
-          <div style="font-size:9px;color:#555;letter-spacing:2px;font-weight:600;">SHIPPING WAYBILL</div>
+          <div style="font-weight:800;font-size:16px;letter-spacing:1px;line-height:1;">MARCEAU</div>
+          <div style="font-size:8px;color:#555;letter-spacing:1.5px;font-weight:600;margin-top:2px;">OFFICIAL SHIPPING WAYBILL</div>
         </div>
-        <div style="text-align:right;font-size:10px;color:#333;">
+        <div style="text-align:right;font-size:9px;color:#333;line-height:1.3;">
           <div><b>Date:</b> ${dateNow()}</div>
-          <div><b>Ref:</b> #${orderNum}</div>
+          <div><b>Waybill ID:</b> #${orderNum}</div>
         </div>
       </div>
       
-      <div style="background:#f9f9f9;padding:10px;border-radius:8px;margin-bottom:12px;font-size:11px;">
-        <div style="font-weight:700;margin-bottom:4px;color:#111;text-transform:uppercase;font-size:10px;letter-spacing:1px;">Deliver To (Recipient):</div>
-        <div style="font-size:13px;font-weight:700;">${esc(name)} (${esc(phone)})</div>
-        <div>${esc(address)}, ${esc(city)}</div>
+      <div style="background:#f8f8f8;padding:8px 10px;border-radius:6px;margin-bottom:10px;font-size:10.5px;border:1px solid #e5e5e5;">
+        <div style="font-weight:700;margin-bottom:2px;color:#111;text-transform:uppercase;font-size:9px;letter-spacing:1px;">Delivery Recipient:</div>
+        <div style="font-size:12px;font-weight:700;">${esc(name)} &nbsp; <span style="font-weight:500;font-size:11px;">(${esc(phone)})</span></div>
+        <div style="margin-top:1px;color:#333;">${esc(address)}, ${esc(city)}</div>
       </div>
 
-      <div style="margin-bottom:14px;font-size:11px;">
+      <div style="margin-bottom:10px;font-size:10.5px;">
         <table style="width:100%;border-collapse:collapse;">
           <tr style="border-bottom:1px solid #ddd;text-align:left;">
-            <th style="padding:4px 0;font-size:10px;color:#666;">ITEM DESCRIPTION</th>
-            <th style="padding:4px 0;font-size:10px;color:#666;text-align:center;">QTY</th>
-            <th style="padding:4px 0;font-size:10px;color:#666;text-align:right;">PRICE</th>
+            <th style="padding:3px 0;font-size:9px;color:#666;">ITEM DESCRIPTION</th>
+            <th style="padding:3px 0;font-size:9px;color:#666;text-align:center;">QTY</th>
+            <th style="padding:3px 0;font-size:9px;color:#666;text-align:right;">AMOUNT</th>
           </tr>
           <tr>
-            <td style="padding:6px 0;font-weight:600;">${esc(p.name)}<br><span style="font-weight:400;color:#555;font-size:10px;">Color: ${color} | Size: ${size}</span></td>
-            <td style="padding:6px 0;text-align:center;">${qty}</td>
-            <td style="padding:6px 0;text-align:right;font-weight:600;">${money(p.price * qty)}</td>
+            <td style="padding:5px 0;font-weight:600;">${esc(p.name)}<br><span style="font-weight:400;color:#555;font-size:9.5px;">Variant: ${color} / Size ${size}</span></td>
+            <td style="padding:5px 0;text-align:center;font-weight:600;">${qty}</td>
+            <td style="padding:5px 0;text-align:right;font-weight:600;">${money(p.price * qty)}</td>
           </tr>
         </table>
       </div>
 
-      <div style="text-align:center;border-top:1px dashed #ccc;padding-top:12px;">
-        <svg id="previewBarcode" style="max-width:100%;height:45px;"></svg>
-        <div style="font-size:12px;font-weight:700;color:#111;letter-spacing:1.5px;margin-top:2px;">${barcodeText}</div>
+      <div style="text-align:center;border-top:1px dashed #bbb;padding-top:8px;margin-top:4px;">
+        <div style="display:inline-block;background:#fff;padding:4px;">
+          <svg id="previewBarcode" style="display:block;margin:0 auto;height:38px;width:210px;max-width:100%;"></svg>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:#111;letter-spacing:1.5px;margin-top:2px;">${barcodeText}</div>
       </div>
     `;
 
@@ -741,8 +743,8 @@ body:not(.authenticated) .mobile-nav{display:none!important}
         JsBarcode("#previewBarcode", barcodeText, {
           format: "CODE128",
           lineColor: "#111",
-          width: 1.8,
-          height: 42,
+          width: 1.6,
+          height: 38,
           displayValue: false
         });
       } catch(e) { console.error(e); }
@@ -800,7 +802,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     window.render();
     closeWaybillModal();
 
-    // 4. Trigger professional print
+    // 4. Trigger professional quarter-A4 print
     window.print();
   }
 
