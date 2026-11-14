@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- JsBarcode Library for Real Working Barcodes -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 <style>
 :root{--ink:#111;--muted:#777;--line:#e9e9e9;--soft:#f7f7f7;--white:#fff;--radius:18px}
 *{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Poppins,Arial,sans-serif;font-size:14px}
@@ -191,7 +193,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       </div>
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>PRODUCT</th><th>BUY COST</th><th>SELL PRICE</th><th>STOCK</th><th>VALUE</th><th></th></tr></thead>
+          <thead><tr><th>PRODUCT</th><th>BUY COST</th><th>SELL PRICE</th><th>STOCK</th><th>VALUE</th><th>ACTIONS</th></tr></thead>
           <tbody id="productsTable"></tbody>
         </table>
       </div>
@@ -310,6 +312,52 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   <button data-page="reports"><b>▤</b>Reports</button>
 </nav>
 
+<!-- WAYBILL & BARCODE MODAL POPUP -->
+<div id="waybillModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:18px;max-width:450px;width:100%;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,0.15);max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;font-size:18px;font-weight:700;">Create & Print Waybill</h3>
+      <button class="btn light" onclick="closeWaybillModal()" style="padding:4px 10px;">✕</button>
+    </div>
+    <div id="waybillContent" style="border:1px dashed #ccc;padding:16px;border-radius:12px;margin-bottom:16px;background:#fafafa;text-align:center;">
+      <!-- Dynamic Waybill & Barcode Preview -->
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div class="field">
+        <label>T-Shirt Color</label>
+        <select id="wbColor" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;">
+          <option value="Black">Black</option>
+          <option value="White">White</option>
+          <option value="Navy">Navy</option>
+          <option value="Grey">Grey</option>
+          <option value="Red">Red</option>
+          <option value="Maroon">Maroon</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Size</label>
+        <select id="wbSize" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;">
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+          <option value="XXL">XXL</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div class="field" style="flex:1;">
+        <label>Dispatch Qty</label>
+        <input id="wbQty" type="number" min="1" value="1" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn" style="flex:1;" onclick="printAndDeductStock()">Print & Deduct Stock</button>
+      <button class="btn light" onclick="closeWaybillModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- FIREBASE REALTIME SCRIPT -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
@@ -355,7 +403,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       'auth/invalid-email':'Please enter a valid User ID.',
       'auth/too-many-requests':'Too many attempts. Please wait and try again.',
       'auth/network-request-failed':'Network error. Check your internet connection.',
-      'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase Authentication. Enable it in Firebase Console.',
+      'auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase Authentication.',
       'auth/unauthorized-domain':'This website domain is not authorized in Firebase Authentication settings.'
     };
     return messages[code] || ('Unable to continue: ' + (error?.message || 'Unknown error'));
@@ -570,6 +618,111 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
 
+  // --- WAYBILL & BARCODE FUNCTIONS ---
+  let currentWaybillProductId = null;
+
+  window.openWaybillModal = function(productId) {
+    const p = window.appData.products.find(x => x.id === productId);
+    if (!p) return;
+    if (p.stock <= 0) {
+      alert('This product is currently Out of Stock!');
+      return;
+    }
+    currentWaybillProductId = productId;
+    document.getElementById('wbQty').value = 1;
+    document.getElementById('wbQty').max = p.stock;
+
+    // Unique sequential order number for barcode
+    const orderNum = String(Math.floor(100 + Math.random() * 900));
+    document.getElementById('wbQty').dataset.orderNum = orderNum;
+
+    updateWaybillPreview();
+    document.getElementById('waybillModal').style.display = 'flex';
+  }
+
+  window.closeWaybillModal = function() {
+    document.getElementById('waybillModal').style.display = 'none';
+    currentWaybillProductId = null;
+  }
+
+  function updateWaybillPreview() {
+    const p = window.appData.products.find(x => x.id === currentWaybillProductId);
+    if(!p) return;
+    const color = document.getElementById('wbColor').value;
+    const size = document.getElementById('wbSize').value;
+    const orderNum = document.getElementById('wbQty').dataset.orderNum || '001';
+    
+    // Exact requested format: MAR / Color / Size / OrderNumber
+    const barcodeText = `MAR/${color}/${size}/${orderNum}`;
+
+    document.getElementById('waybillContent').innerHTML = `
+      <div style="font-family:Poppins,sans-serif;text-align:center;">
+        <div style="font-weight:800;font-size:16px;letter-spacing:1px;">MARCEAU APPAREL</div>
+        <div style="font-size:10px;color:#777;margin-bottom:8px;">SHIPPING WAYBILL & BARCODE</div>
+        <hr style="border:0;border-top:1px dashed #ccc;margin:8px 0;">
+        <div style="font-size:11px;text-align:left;margin:4px 0;"><b>Item:</b> ${esc(p.name)}</div>
+        <div style="font-size:11px;text-align:left;margin:4px 0;"><b>Variant:</b> ${color} / Size ${size}</div>
+        <div style="font-size:11px;text-align:left;margin:4px 0;"><b>Price:</b> ${money(p.price)}</div>
+        <div style="margin:12px 0;background:#fff;padding:8px;border-radius:8px;display:inline-block;">
+          <svg id="previewBarcode"></svg>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:#111;letter-spacing:1px;">${barcodeText}</div>
+      </div>
+    `;
+    setTimeout(() => {
+      try {
+        JsBarcode("#previewBarcode", barcodeText, {
+          format: "CODE128",
+          lineColor: "#111",
+          width: 1.8,
+          height: 45,
+          displayValue: false
+        });
+      } catch(e) { console.error(e); }
+    }, 50);
+  }
+
+  document.addEventListener('change', function(e) {
+    if(e.target && (e.target.id === 'wbColor' || e.target.id === 'wbSize')) {
+      updateWaybillPreview();
+    }
+  });
+
+  window.printAndDeductStock = function() {
+    const p = window.appData.products.find(x => x.id === currentWaybillProductId);
+    const qty = Number(document.getElementById('wbQty').value);
+    const color = document.getElementById('wbColor').value;
+    const size = document.getElementById('wbSize').value;
+    
+    if (!p || qty < 1 || qty > p.stock) {
+      alert('Please enter a valid quantity within available stock.');
+      return;
+    }
+
+    // 1. Safely deduct stock
+    p.stock = Number(p.stock) - qty;
+
+    // 2. Record sale automatically
+    window.appData.sales.unshift({
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
+      productId: p.id,
+      name: `${p.name} (${color}, ${size})`,
+      qty: qty,
+      price: p.price,
+      total: qty * p.price,
+      cost: Number(p.cost) || 0,
+      date: dateNow()
+    });
+
+    // 3. Save to Firebase and update UI
+    window.saveToFirebase();
+    window.render();
+    closeWaybillModal();
+
+    // 4. Trigger print
+    window.print();
+  }
+
   function totals() {
     const period = document.getElementById('periodFilter')?.value || 'all';
     const today = new Date();
@@ -605,7 +758,21 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     document.getElementById('profitNote').textContent = t.net < 0 ? 'Loss after costs and expenses' : 'Profit after costs and expenses';
     document.getElementById('stockCount').textContent = t.stock;
 
-    document.getElementById('productsTable').innerHTML = window.appData.products.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${money(p.stock*p.cost)}</td><td><button class="btn danger" onclick="del('products','${p.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('productsTable').innerHTML = window.appData.products.map(p => `
+      <tr>
+        <td><b>${esc(p.name)}</b></td>
+        <td>${money(p.cost)}</td>
+        <td>${money(p.price)}</td>
+        <td>${p.stock}</td>
+        <td>${money(p.stock*p.cost)}</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn light" style="padding:6px 10px;font-size:10px;" onclick="openWaybillModal('${p.id}')">Waybill</button>
+            <button class="btn danger" style="padding:6px 10px;font-size:10px;" onclick="del('products','${p.id}')">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
     document.getElementById('productsEmpty').style.display = window.appData.products.length ? 'none' : 'block';
     renderProductsSearch();
 
@@ -719,13 +886,13 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 
   function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
-  function downloadPNGReport() {
+  window.downloadPNGReport = function() {
     drawPNGReport();
     const canvas = document.getElementById('reportCanvas');
     const a = document.createElement('a'); a.download = 'marceau-business-report-' + dateNow() + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
   }
 
-  function exportCSV() {
+  window.exportCSV = function() {
     const rows = [
       ['Type', 'Date', 'Description / Product', 'Category', 'Person', 'Quantity', 'Unit price (LKR)', 'Amount (LKR)'],
       ...window.appData.sales.map(s => ['Sale', s.date || '', s.name || '', '', '', s.qty || 0, s.price || 0, s.total || 0]),
