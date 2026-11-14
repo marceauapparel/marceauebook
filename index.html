@@ -8,10 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- JsBarcode Library for Real Working Barcodes -->
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-<!-- html2canvas for Direct Image Download -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{--ink:#0d0d0d;--muted:#666666;--line:#e2e2e2;--soft:#f8f9fa;--white:#ffffff;--radius:20px;--shadow:0 10px 30px rgba(0,0,0,0.04)}
 *{box-sizing:border-box}body{margin:0;background:#fcfcfc;color:var(--ink);font-family:'Poppins',Arial,sans-serif;font-size:13.5px;letter-spacing:-0.01em}
@@ -48,15 +44,6 @@ main{flex:1;min-width:0;padding:34px clamp(20px,4vw,50px) 60px;max-width:1600px;
 .footer{font-size:10.5px;color:#999;text-align:center;margin-top:36px;font-weight:500}
 .sync-indicator{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:#027a48;background:#ecfdf3;padding:6px 12px;border-radius:999px;font-weight:600}
 .sync-indicator.syncing{color:#b93815;background:#fff4ed}
-
-/* Quarter-A4 Waybill Print Layout */
-@media print {
-  body * { visibility: hidden; }
-  #waybillSection, #waybillSection * { visibility: visible; }
-  #waybillSection { position: fixed; inset: 0; background: #fff !important; display: flex !important; align-items: center; justify-content: center; padding: 0; z-index: 9999; }
-  #waybillSection > div.waybill-card-wrap { box-shadow: none !important; border: 2px solid #111 !important; width: 148mm !important; height: 105mm !important; max-width: none !important; padding: 8mm !important; margin: auto; }
-  .waybill-hide-print { display: none !important; }
-}
 
 @media(max-width:900px){.sidebar{width:220px}.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
 @media(max-width:620px){.app{display:block;padding-bottom:80px}.sidebar{display:none}main{padding:20px 16px 36px}.topbar{margin-bottom:24px;gap:12px}.brand-mobile{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 16px;margin-bottom:20px;border-bottom:1px solid var(--line)}.brand-mobile img{display:block;width:auto;height:40px;max-width:150px;object-fit:contain}.brand-mobile span{font-size:9.5px;letter-spacing:2px;color:var(--muted);font-weight:700;white-space:nowrap}.date-chip{font-size:10.5px;padding:8px 12px;width:100%;text-align:center}.welcome{align-items:start;flex-direction:column}.welcome .btn{width:100%}.stats{gap:12px}.card{padding:16px;border-radius:16px}.stat-value{font-size:24px}.grid2{gap:14px}.chart{height:180px}.mobile-nav{display:flex;position:fixed;z-index:5;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--line);justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -5px 25px rgba(0,0,0,0.06)}.mobile-nav button{border:0;background:transparent;color:var(--muted);font-size:10px;display:grid;justify-items:center;gap:3px;padding:6px 10px;font-weight:500}.mobile-nav button.active{color:var(--ink);font-weight:700}.mobile-nav b{font-size:18px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar .btn{flex:1}.footer{margin-bottom:8px}}
@@ -117,7 +104,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     <button data-page="products"><span class="ico">◇</span> Products & Stock</button>
     <button data-page="sales"><span class="ico">↗</span> Sales</button>
     <button data-page="expenses"><span class="ico">↘</span> Expenses</button>
-    <button data-page="waybill"><span class="ico">🖨️</span> Waybill / Shipping</button>
     <button data-page="reports"><span class="ico">▤</span> Reports</button>
   </nav>
   <div class="side-note">
@@ -287,98 +273,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     </div>
   </section>
 
-  <!-- WAYBILL & SHIPPING SECTION (Dedicated Page) -->
-  <section class="section" id="waybillSection">
-    <div class="toolbar waybill-hide-print">
-      <div><div class="eyebrow">COURIER & FULFILLMENT</div><h2 class="page-title" style="font-size:22px">Shipping Waybill Generator</h2></div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,420px);gap:20px;align-items:start;" id="waybillLayoutGrid">
-      
-      <!-- Left side: Live Preview Card (Quarter-A4 / A6 Standard) -->
-      <div style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);">
-        <div class="waybill-hide-print" style="font-weight:700;font-size:13px;margin-bottom:12px;color:#111;">📄 Live Waybill Preview (A6 Size)</div>
-        
-        <div id="waybillContent" class="waybill-card-wrap" style="border:2px solid #0d0d0d;padding:14px;border-radius:14px;background:#fff;font-family:'Poppins',sans-serif;width:100%;max-width:148mm;margin:0 auto;">
-          <!-- Dynamic Waybill Card -->
-        </div>
-
-        <div class="waybill-hide-print" style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
-          <button class="btn" style="flex:1;background:#0d0d0d;padding:13px;" onclick="printAndDeductStock()">🖨️ Print Waybill & Deduct Stock</button>
-          <button class="btn light" style="flex:1;padding:13px;font-weight:700;" onclick="downloadWaybillImage()">📥 Download PNG Image</button>
-        </div>
-      </div>
-
-      <!-- Right side: Input Form -->
-      <div class="waybill-hide-print card" style="background:#fff;">
-        <div class="card-head"><div class="card-title">Order & Dispatch Details</div></div>
-        <div style="display:grid;gap:12px;">
-          <div class="field full">
-            <label>Select Product from Stock</label>
-            <select id="wbProductSelect" onchange="onWaybillProductSelect()" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;background:#fff;font-weight:600;"></select>
-          </div>
-
-          <div style="border-top:1px solid var(--line);padding-top:10px;margin-top:4px;font-weight:700;font-size:12px;color:#111;">📦 Sender Details (From)</div>
-          <div class="field">
-            <label>Sender Brand / Name</label>
-            <input id="wbSenderName" value="MARCEAU" required style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-          <div class="field">
-            <label>Sender Phone</label>
-            <input id="wbSenderPhone" value="0712345678" required style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-          <div class="field full">
-            <label>Sender Address / City</label>
-            <input id="wbSenderAddress" value="Main Street, Kurunegala" required style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-
-          <div style="border-top:1px solid var(--line);padding-top:10px;margin-top:4px;font-weight:700;font-size:12px;color:#111;">📬 Recipient Details (To)</div>
-          <div class="field">
-            <label>Customer Name</label>
-            <input id="wbCustName" required placeholder="e.g. Kasun Perera" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-          <div class="field">
-            <label>Phone Number</label>
-            <input id="wbCustPhone" required placeholder="0712345678" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-          <div class="field full">
-            <label>Delivery Address</label>
-            <input id="wbCustAddress" required placeholder="e.g. No 45, Main Street" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-          <div class="field">
-            <label>City / Town</label>
-            <input id="wbCustCity" required placeholder="e.g. Kurunegala" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-          <div class="field">
-            <label>T-Shirt Color</label>
-            <select id="wbColor" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Navy">Navy</option>
-              <option value="Grey">Grey</option>
-              <option value="Red">Red</option>
-              <option value="Maroon">Maroon</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Size</label>
-            <select id="wbSize" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Dispatch Qty</label>
-            <input id="wbQty" type="number" min="1" value="1" style="width:100%;padding:10px;border:1px solid #dcdcdc;border-radius:10px;">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- REPORTS SECTION -->
   <section class="section" id="reports">
     <div class="card" style="margin-bottom:18px;background:linear-gradient(135deg, #0d0d0d 0%, #262626 100%);color:#fff;border:0;box-shadow:0 15px 35px rgba(0,0,0,0.15)">
@@ -415,7 +309,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   <button data-page="products"><b>◇</b>Stock</button>
   <button data-page="sales"><b>↗</b>Sales</button>
   <button data-page="expenses"><b>↘</b>Costs</button>
-  <button data-page="waybill"><b>🖨️</b>Waybill</button>
   <button data-page="reports"><b>▤</b>Reports</button>
 </nav>
 
@@ -573,15 +466,11 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   function go(page) {
     document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === page));
     document.querySelectorAll('[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === page));
-    document.getElementById('pageTitle').textContent = ({overview:'Overview', products:'Products & Stock', sales:'Sales', expenses:'Expenses', waybillSection:'Waybill / Shipping', reports:'Reports'})[page];
+    document.getElementById('pageTitle').textContent = ({overview:'Overview', products:'Products & Stock', sales:'Sales', expenses:'Expenses', reports:'Reports'})[page];
     window.scrollTo({top: 0, behavior: 'smooth'});
     if (page === 'sales') fillProductSelect();
-    if (page === 'waybillSection') initWaybillPage();
   }
-  document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => {
-    const target = b.dataset.page === 'waybill' ? 'waybillSection' : b.dataset.page;
-    go(target);
-  }));
+  document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => go(b.dataset.page)));
 
   function showForm(id) {
     document.getElementById(id).style.display = 'block';
@@ -683,184 +572,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
 
-  // --- WAYBILL & BARCODE PAGE LOGIC ---
-  function initWaybillPage() {
-    const select = document.getElementById('wbProductSelect');
-    if(!select) return;
-    const currentVal = select.value;
-    select.innerHTML = '<option value="">-- Select Product --</option>' +
-      window.appData.products.map(p => `<option value="${esc(p.id)}"${p.id === currentVal ? ' selected' : ''}>${esc(p.name)} (Stock: ${p.stock})</option>`).join('');
-    
-    if(!document.getElementById('wbQty').dataset.orderNum) {
-      document.getElementById('wbQty').dataset.orderNum = String(Math.floor(100 + Math.random() * 900));
-    }
-    updateWaybillPreview();
-  }
-
-  window.onWaybillProductSelect = function() {
-    updateWaybillPreview();
-  }
-
-  function updateWaybillPreview() {
-    const productId = document.getElementById('wbProductSelect')?.value;
-    const p = window.appData.products.find(x => x.id === productId) || { name: 'Sample T-Shirt', price: 1800, stock: 10 };
-    
-    const senderName = document.getElementById('wbSenderName')?.value.trim() || 'MARCEAU';
-    const senderPhone = document.getElementById('wbSenderPhone')?.value.trim() || '0712345678';
-    const senderAddress = document.getElementById('wbSenderAddress')?.value.trim() || 'Main Street, Kurunegala';
-
-    const name = document.getElementById('wbCustName')?.value.trim() || 'Kasun Perera';
-    const phone = document.getElementById('wbCustPhone')?.value.trim() || '071 234 5678';
-    const address = document.getElementById('wbCustAddress')?.value.trim() || 'No 45, Main Street';
-    const city = document.getElementById('wbCustCity')?.value.trim() || 'Kurunegala';
-    const color = document.getElementById('wbColor')?.value || 'Black';
-    const size = document.getElementById('wbSize')?.value || 'M';
-    const qty = document.getElementById('wbQty')?.value || 1;
-    const orderNum = document.getElementById('wbQty')?.dataset.orderNum || '856';
-    
-    const barcodeText = `MAR/${color}/${size}/${orderNum}`;
-
-    const contentBox = document.getElementById('waybillContent');
-    if(!contentBox) return;
-
-    contentBox.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0d0d0d;padding-bottom:5px;margin-bottom:6px;">
-        <div>
-          <div style="font-weight:800;font-size:14px;letter-spacing:1px;line-height:1;color:#0d0d0d;">MARCEAU</div>
-          <div style="font-size:7px;color:#666;letter-spacing:1.5px;font-weight:700;margin-top:1px;">OFFICIAL SHIPPING WAYBILL</div>
-        </div>
-        <div style="text-align:right;font-size:8.5px;color:#333;line-height:1.2;">
-          <div><b>Date:</b> ${dateNow()}</div>
-          <div><b>Waybill ID:</b> #${orderNum}</div>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-        <div style="background:#f4f5f6;padding:5px 7px;border-radius:5px;border:1px solid #e2e2e2;font-size:9.5px;">
-          <div style="font-weight:700;color:#111;text-transform:uppercase;font-size:7.5px;letter-spacing:0.5px;margin-bottom:1px;">From (Sender):</div>
-          <div style="font-weight:800;color:#0d0d0d;">${esc(senderName)}</div>
-          <div style="color:#444;font-size:9px;">${esc(senderAddress)}</div>
-          <div style="color:#444;font-size:9px;">Ph: ${esc(senderPhone)}</div>
-        </div>
-        <div style="background:#f8f9fa;padding:5px 7px;border-radius:5px;border:1px solid #e2e2e2;font-size:9.5px;">
-          <div style="font-weight:700;color:#111;text-transform:uppercase;font-size:7.5px;letter-spacing:0.5px;margin-bottom:1px;">To (Recipient):</div>
-          <div style="font-weight:800;color:#0d0d0d;">${esc(name)}</div>
-          <div style="color:#444;font-size:9px;">${esc(address)}, ${esc(city)}</div>
-          <div style="color:#444;font-size:9px;">Ph: ${esc(phone)}</div>
-        </div>
-      </div>
-
-      <div style="margin-bottom:6px;font-size:9.5px;">
-        <table style="width:100%;border-collapse:collapse;">
-          <tr style="border-bottom:1px solid #ddd;text-align:left;">
-            <th style="padding:2px 0;font-size:8px;color:#666;font-weight:700;">ITEM DESCRIPTION</th>
-            <th style="padding:2px 0;font-size:8px;color:#666;text-align:center;font-weight:700;">QTY</th>
-            <th style="padding:2px 0;font-size:8px;color:#666;text-align:right;font-weight:700;">AMOUNT</th>
-          </tr>
-          <tr>
-            <td style="padding:3px 0;font-weight:700;color:#0d0d0d;">${esc(p.name)} <span style="font-weight:500;color:#555;font-size:9px;">(${color} / ${size})</span></td>
-            <td style="padding:3px 0;text-align:center;font-weight:700;">${qty}</td>
-            <td style="padding:3px 0;text-align:right;font-weight:700;">${money((p.price || 0) * qty)}</td>
-          </tr>
-        </table>
-      </div>
-
-      <div style="text-align:center;border-top:1px dashed #bbb;padding-top:5px;margin-top:2px;">
-        <div style="display:inline-block;background:#fff;padding:2px;">
-          <svg id="previewBarcode" style="display:block;margin:0 auto;height:32px;width:180px;max-width:100%;"></svg>
-        </div>
-        <div style="font-size:10px;font-weight:800;color:#0d0d0d;letter-spacing:1.5px;margin-top:1px;">${barcodeText}</div>
-      </div>
-    `;
-
-    setTimeout(() => {
-      try {
-        JsBarcode("#previewBarcode", barcodeText, {
-          format: "CODE128",
-          lineColor: "#0d0d0d",
-          width: 1.4,
-          height: 32,
-          displayValue: false
-        });
-      } catch(e) { console.error(e); }
-    }, 50);
-  }
-
-  document.addEventListener('input', function(e) {
-    if(e.target && ['wbSenderName', 'wbSenderPhone', 'wbSenderAddress', 'wbCustName', 'wbCustPhone', 'wbCustAddress', 'wbCustCity', 'wbQty'].includes(e.target.id)) {
-      updateWaybillPreview();
-    }
-  });
-
-  document.addEventListener('change', function(e) {
-    if(e.target && (e.target.id === 'wbColor' || e.target.id === 'wbSize' || e.target.id === 'wbProductSelect')) {
-      updateWaybillPreview();
-    }
-  });
-
-  window.downloadWaybillImage = function() {
-    const name = document.getElementById('wbCustName').value.trim();
-    if (!name) {
-      alert('Please fill in customer details before downloading the image.');
-      return;
-    }
-    const element = document.getElementById('waybillContent');
-    html2canvas(element, { scale: 3, backgroundColor: '#ffffff' }).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `marceau-waybill-${document.getElementById('wbQty').dataset.orderNum || 'shipping'}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-  }
-
-  window.printAndDeductStock = function() {
-    const productId = document.getElementById('wbProductSelect').value;
-    const p = window.appData.products.find(x => x.id === productId);
-    const qty = Number(document.getElementById('wbQty').value);
-    const name = document.getElementById('wbCustName').value.trim();
-    const phone = document.getElementById('wbCustPhone').value.trim();
-    const address = document.getElementById('wbCustAddress').value.trim();
-    const city = document.getElementById('wbCustCity').value.trim();
-    const color = document.getElementById('wbColor').value;
-    const size = document.getElementById('wbSize').value;
-    
-    if (!p) {
-      alert('Please select a product from stock.');
-      return;
-    }
-    if (!name || !phone || !address || !city) {
-      alert('Please fill in all customer delivery details.');
-      return;
-    }
-    if (qty < 1 || qty > p.stock) {
-      alert('Please enter a valid quantity within available stock.');
-      return;
-    }
-
-    // 1. Safely deduct stock
-    p.stock = Number(p.stock) - qty;
-
-    // 2. Record sale automatically with customer details
-    window.appData.sales.unshift({
-      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
-      productId: p.id,
-      name: `${p.name} (${color}, ${size}) — To: ${name} (${city})`,
-      qty: qty,
-      price: p.price,
-      total: qty * p.price,
-      cost: Number(p.cost) || 0,
-      date: dateNow()
-    });
-
-    // 3. Save to Firebase and update UI
-    window.saveToFirebase();
-    window.render();
-    initWaybillPage();
-
-    // 4. Trigger professional quarter-A4 print
-    window.print();
-  }
-
   function totals() {
     const period = document.getElementById('periodFilter')?.value || 'all';
     const today = new Date();
@@ -939,7 +650,6 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     document.getElementById('reportSummary').innerHTML = [['Total revenue', t.revenue], ['Cost of goods sold', -t.cost], ['Gross profit', t.gross], ['Business expenses', -t.expenses], ['Net ' + (t.net < 0 ? 'loss' : 'profit'), t.net]].map(([k, v]) => `<div class="quick-row"><span>${k}</span><b>${v < 0 ? '−' : ''}${money(Math.abs(v))}</b></div>`).join('');
 
     drawChart();
-    initWaybillPage();
   };
 
   function drawChart() {
