@@ -27,7 +27,7 @@ main{flex:1;min-width:0;padding:34px clamp(20px,4vw,50px) 60px;max-width:1600px;
 .date-chip{border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--muted);font-size:11.5px;background:var(--white);font-weight:500;box-shadow:var(--shadow);white-space:nowrap}
 .section{display:none}.section.active{display:block}
 .welcome{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:0 0 24px}.welcome p{margin:6px 0 0;color:var(--muted);font-size:13px}
-.btn{border:1px solid var(--ink);background:var(--ink);color:var(--white);padding:11px 18px;border-radius:12px;font-weight:600;font-size:12px;transition:all 0.2s ease}.btn:hover{background:#333;transform:translateY(-1px)}.btn.light{background:var(--white);color:var(--ink);border-color:var(--line)}.btn.light:hover{background:var(--soft)}.btn.danger{background:var(--white);color:#d92d20;border-color:fecdca}.btn.danger:hover{background:#fef3f2}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--white);padding:11px 18px;border-radius:12px;font-weight:600;font-size:12px;transition:all 0.2s ease}.btn:hover{background:#333;transform:translateY(-1px)}.btn.light{background:var(--white);color:var(--ink);border-color:var(--line)}.btn.light:hover{background:var(--soft)}.btn.danger{background:var(--white);color:#d92d20;border-color:#fecdca}.btn.danger:hover{background:#fef3f2}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:20px}
 .card{border:1px solid var(--line);border-radius:var(--radius);padding:22px;background:var(--white);min-width:0;box-shadow:var(--shadow);transition:all 0.2s ease}
 .card:hover{border-color:#d0d0d0}
@@ -54,7 +54,7 @@ main{flex:1;min-width:0;padding:34px clamp(20px,4vw,50px) 60px;max-width:1600px;
   body * { visibility: hidden; }
   #waybillModal, #waybillModal * { visibility: visible; }
   #waybillModal { position: fixed; inset: 0; background: #fff !important; display: flex !important; align-items: center; justify-content: center; padding: 0; z-index: 9999; }
-  #waybillModal > div { box-shadow: none !important; border: 2px solid #111 !important; width: 148mm !important; height: 105mm !important; max-width: none !important; padding: 10mm !important; margin: auto; }
+  #waybillModal > div { box-shadow: none !important; border: 2px solid #111 !important; width: 148mm !important; height: 105mm !important; max-width: none !important; padding: 8mm !important; margin: auto; }
   .modal-hide-print { display: none !important; }
 }
 
@@ -328,35 +328,50 @@ body:not(.authenticated) .mobile-nav{display:none!important}
 <!-- PROFESSIONAL QUARTER-A4 WAYBILL & BARCODE MODAL POPUP -->
 <div id="waybillModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(4px);">
   <div style="background:#fff;border-radius:24px;max-width:580px;width:100%;padding:30px;box-shadow:0 30px 60px rgba(0,0,0,0.25);max-height:95vh;overflow-y:auto;">
-    <div class="modal-hide-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <div class="modal-hide-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <div>
         <h3 style="margin:0;font-size:20px;font-weight:800;letter-spacing:-0.02em;">Create Shipping Waybill</h3>
-        <p style="margin:3px 0 0;font-size:11.5px;color:var(--muted);">Quarter-A4 (A6 Standard) Courier Label</p>
+        <p style="margin:3px 0 0;font-size:11.5px;color:var(--muted);">Quarter-A4 (A6 Standard) Courier Label with Sender & Recipient</p>
       </div>
       <button class="btn light" onclick="closeWaybillModal()" style="padding:6px 12px;">✕</button>
     </div>
 
-    <!-- Customer Details Form Inputs -->
-    <div class="modal-hide-print" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+    <!-- Customer & Sender Details Form Inputs -->
+    <div class="modal-hide-print" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;background:#f8f9fa;padding:14px;border-radius:14px;border:1px solid #e2e2e2;">
+      <div class="field full" style="grid-column:1/-1;font-weight:700;font-size:12px;color:#111;margin-bottom:-4px;">📦 Sender Details (From)</div>
+      <div class="field">
+        <label>Sender Name / Brand</label>
+        <input id="wbSenderName" value="MARCEAU" required style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
+      </div>
+      <div class="field">
+        <label>Sender Phone</label>
+        <input id="wbSenderPhone" value="0712345678" required style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
+      </div>
+      <div class="field full" style="grid-column:1/-1;">
+        <label>Sender Address / City</label>
+        <input id="wbSenderAddress" value="Main Street, Kurunegala" required style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
+      </div>
+
+      <div class="field full" style="grid-column:1/-1;font-weight:700;font-size:12px;color:#111;margin:6px 0 -4px;">📬 Recipient Details (To)</div>
       <div class="field">
         <label>Customer Name</label>
-        <input id="wbCustName" required placeholder="e.g. Kasun Perera" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;">
+        <input id="wbCustName" required placeholder="e.g. Kasun Perera" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
       </div>
       <div class="field">
         <label>Phone Number</label>
-        <input id="wbCustPhone" required placeholder="0712345678" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;">
+        <input id="wbCustPhone" required placeholder="0712345678" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
       </div>
       <div class="field full" style="grid-column:1/-1;">
         <label>Delivery Address</label>
-        <input id="wbCustAddress" required placeholder="e.g. No 45, Main Street" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;">
+        <input id="wbCustAddress" required placeholder="e.g. No 45, Main Street" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
       </div>
       <div class="field">
         <label>City / Town</label>
-        <input id="wbCustCity" required placeholder="e.g. Kurunegala" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;">
+        <input id="wbCustCity" required placeholder="e.g. Kurunegala" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
       </div>
       <div class="field">
         <label>T-Shirt Color</label>
-        <select id="wbColor" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;background:#fff;">
+        <select id="wbColor" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
           <option value="Black">Black</option>
           <option value="White">White</option>
           <option value="Navy">Navy</option>
@@ -367,7 +382,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       </div>
       <div class="field">
         <label>Size</label>
-        <select id="wbSize" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;background:#fff;">
+        <select id="wbSize" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
           <option value="S">S</option>
           <option value="M">M</option>
           <option value="L">L</option>
@@ -377,19 +392,19 @@ body:not(.authenticated) .mobile-nav{display:none!important}
       </div>
       <div class="field">
         <label>Dispatch Qty</label>
-        <input id="wbQty" type="number" min="1" value="1" style="width:100%;padding:11px 13px;border:1px solid #dcdcdc;border-radius:12px;">
+        <input id="wbQty" type="number" min="1" value="1" style="width:100%;padding:10px 12px;border:1px solid #dcdcdc;border-radius:10px;background:#fff;">
       </div>
     </div>
 
     <!-- Perfect Quarter-A4 Waybill Preview Container -->
-    <div id="waybillContent" style="border:2px solid #0d0d0d;padding:16px;border-radius:14px;margin-bottom:20px;background:#fff;font-family:'Poppins',sans-serif;width:100%;max-width:148mm;margin-left:auto;margin-right:auto;">
+    <div id="waybillContent" style="border:2px solid #0d0d0d;padding:14px;border-radius:14px;margin-bottom:18px;background:#fff;font-family:'Poppins',sans-serif;width:100%;max-width:148mm;margin-left:auto;margin-right:auto;">
       <!-- Dynamic Waybill Card -->
     </div>
 
-    <div class="modal-hide-print" style="display:flex;gap:12px;flex-wrap:wrap;">
-      <button class="btn" style="flex:1;background:#0d0d0d;padding:13px;" onclick="printAndDeductStock()">Print Waybill & Deduct</button>
-      <button class="btn light" style="flex:1;padding:13px;font-weight:700;" onclick="downloadWaybillImage()">📥 Download as Image (PNG)</button>
-      <button class="btn light" onclick="closeWaybillModal()" style="padding:13px 18px;">Cancel</button>
+    <div class="modal-hide-print" style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn" style="flex:1;background:#0d0d0d;padding:12px;" onclick="printAndDeductStock()">Print Waybill & Deduct</button>
+      <button class="btn light" style="flex:1;padding:12px;font-weight:700;" onclick="downloadWaybillImage()">📥 Download as Image (PNG)</button>
+      <button class="btn light" onclick="closeWaybillModal()" style="padding:12px 16px;">Cancel</button>
     </div>
   </div>
 </div>
@@ -688,6 +703,10 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   function updateWaybillPreview() {
     const p = window.appData.products.find(x => x.id === currentWaybillProductId);
     if(!p) return;
+    const senderName = document.getElementById('wbSenderName').value.trim() || 'MARCEAU';
+    const senderPhone = document.getElementById('wbSenderPhone').value.trim() || '0712345678';
+    const senderAddress = document.getElementById('wbSenderAddress').value.trim() || 'Main Street, Kurunegala';
+
     const name = document.getElementById('wbCustName').value.trim() || 'Kasun Perera';
     const phone = document.getElementById('wbCustPhone').value.trim() || '071 234 5678';
     const address = document.getElementById('wbCustAddress').value.trim() || 'No 45, Main Street';
@@ -697,47 +716,57 @@ body:not(.authenticated) .mobile-nav{display:none!important}
     const qty = document.getElementById('wbQty').value || 1;
     const orderNum = document.getElementById('wbQty').dataset.orderNum || '001';
     
-    // Exact requested barcode format: MAR / Color / Size / OrderNumber
+    // Barcode format: MAR / Color / Size / OrderNumber
     const barcodeText = `MAR/${color}/${size}/${orderNum}`;
 
     document.getElementById('waybillContent').innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0d0d0d;padding-bottom:6px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0d0d0d;padding-bottom:5px;margin-bottom:6px;">
         <div>
-          <div style="font-weight:800;font-size:15px;letter-spacing:1px;line-height:1;color:#0d0d0d;">MARCEAU</div>
-          <div style="font-size:7.5px;color:#666;letter-spacing:1.5px;font-weight:700;margin-top:2px;">OFFICIAL SHIPPING WAYBILL</div>
+          <div style="font-weight:800;font-size:14px;letter-spacing:1px;line-height:1;color:#0d0d0d;">MARCEAU</div>
+          <div style="font-size:7px;color:#666;letter-spacing:1.5px;font-weight:700;margin-top:1px;">OFFICIAL SHIPPING WAYBILL</div>
         </div>
-        <div style="text-align:right;font-size:9px;color:#333;line-height:1.3;">
+        <div style="text-align:right;font-size:8.5px;color:#333;line-height:1.2;">
           <div><b>Date:</b> ${dateNow()}</div>
           <div><b>Waybill ID:</b> #${orderNum}</div>
         </div>
       </div>
-      
-      <div style="background:#f8f9fa;padding:7px 9px;border-radius:6px;margin-bottom:8px;font-size:10px;border:1px solid #e2e2e2;">
-        <div style="font-weight:700;margin-bottom:2px;color:#111;text-transform:uppercase;font-size:8.5px;letter-spacing:1px;">Delivery Recipient:</div>
-        <div style="font-size:11.5px;font-weight:800;color:#0d0d0d;">${esc(name)} &nbsp; <span style="font-weight:500;font-size:10.5px;">(${esc(phone)})</span></div>
-        <div style="margin-top:1px;color:#444;">${esc(address)}, ${esc(city)}</div>
+
+      <!-- SENDER & RECIPIENT BOXES -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+        <div style="background:#f4f5f6;padding:5px 7px;border-radius:5px;border:1px solid #e2e2e2;font-size:9.5px;">
+          <div style="font-weight:700;color:#111;text-transform:uppercase;font-size:7.5px;letter-spacing:0.5px;margin-bottom:1px;">From (Sender):</div>
+          <div style="font-weight:800;color:#0d0d0d;">${esc(senderName)}</div>
+          <div style="color:#444;font-size:9px;">${esc(senderAddress)}</div>
+          <div style="color:#444;font-size:9px;">Ph: ${esc(senderPhone)}</div>
+        </div>
+        <div style="background:#f8f9fa;padding:5px 7px;border-radius:5px;border:1px solid #e2e2e2;font-size:9.5px;">
+          <div style="font-weight:700;color:#111;text-transform:uppercase;font-size:7.5px;letter-spacing:0.5px;margin-bottom:1px;">To (Recipient):</div>
+          <div style="font-weight:800;color:#0d0d0d;">${esc(name)}</div>
+          <div style="color:#444;font-size:9px;">${esc(address)}, ${esc(city)}</div>
+          <div style="color:#444;font-size:9px;">Ph: ${esc(phone)}</div>
+        </div>
       </div>
 
-      <div style="margin-bottom:8px;font-size:10px;">
+      <div style="margin-bottom:6px;font-size:9.5px;">
         <table style="width:100%;border-collapse:collapse;">
           <tr style="border-bottom:1px solid #ddd;text-align:left;">
-            <th style="padding:2px 0;font-size:8.5px;color:#666;font-weight:700;">ITEM DESCRIPTION</th>
-            <th style="padding:2px 0;font-size:8.5px;color:#666;text-align:center;font-weight:700;">QTY</th>
-            <th style="padding:2px 0;font-size:8.5px;color:#666;text-align:right;font-weight:700;">AMOUNT</th>
+            <th style="padding:2px 0;font-size:8px;color:#666;font-weight:700;">ITEM DESCRIPTION</th>
+            <th style="padding:2px 0;font-size:8px;color:#666;text-align:center;font-weight:700;">QTY</th>
+            <th style="padding:2px 0;font-size:8px;color:#666;text-align:right;font-weight:700;">AMOUNT</th>
           </tr>
           <tr>
-            <td style="padding:4px 0;font-weight:700;color:#0d0d0d;">${esc(p.name)}<br><span style="font-weight:500;color:#555;font-size:9px;">Variant: ${color} / Size ${size}</span></td>
-            <td style="padding:4px 0;text-align:center;font-weight:700;">${qty}</td>
-            <td style="padding:4px 0;text-align:right;font-weight:700;">${money(p.price * qty)}</td>
+            <td style="padding:3px 0;font-weight:700;color:#0d0d0d;">${esc(p.name)} <span style="font-weight:500;color:#555;font-size:9px;">(${color} / ${size})</span></td>
+            <td style="padding:3px 0;text-align:center;font-weight:700;">${qty}</td>
+            <td style="padding:3px 0;text-align:right;font-weight:700;">${money(p.price * qty)}</td>
           </tr>
         </table>
       </div>
 
-      <div style="text-align:center;border-top:1px dashed #bbb;padding-top:6px;margin-top:2px;">
+      <div style="text-align:center;border-top:1px dashed #bbb;padding-top:5px;margin-top:2px;">
         <div style="display:inline-block;background:#fff;padding:2px;">
-          <svg id="previewBarcode" style="display:block;margin:0 auto;height:35px;width:190px;max-width:100%;"></svg>
+          <svg id="previewBarcode" style="display:block;margin:0 auto;height:32px;width:180px;max-width:100%;"></svg>
         </div>
-        <div style="font-size:10.5px;font-weight:800;color:#0d0d0d;letter-spacing:1.5px;margin-top:2px;">${barcodeText}</div>
+        <div style="font-size:10px;font-weight:800;color:#0d0d0d;letter-spacing:1.5px;margin-top:1px;">${barcodeText}</div>
       </div>
     `;
 
@@ -746,8 +775,8 @@ body:not(.authenticated) .mobile-nav{display:none!important}
         JsBarcode("#previewBarcode", barcodeText, {
           format: "CODE128",
           lineColor: "#0d0d0d",
-          width: 1.5,
-          height: 35,
+          width: 1.4,
+          height: 32,
           displayValue: false
         });
       } catch(e) { console.error(e); }
@@ -755,7 +784,7 @@ body:not(.authenticated) .mobile-nav{display:none!important}
   }
 
   document.addEventListener('input', function(e) {
-    if(e.target && ['wbCustName', 'wbCustPhone', 'wbCustAddress', 'wbCustCity', 'wbQty'].includes(e.target.id)) {
+    if(e.target && ['wbSenderName', 'wbSenderPhone', 'wbSenderAddress', 'wbCustName', 'wbCustPhone', 'wbCustAddress', 'wbCustCity', 'wbQty'].includes(e.target.id)) {
       updateWaybillPreview();
     }
   });
